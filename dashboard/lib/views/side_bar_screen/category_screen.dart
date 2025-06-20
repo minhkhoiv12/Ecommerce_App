@@ -1,8 +1,9 @@
+import 'package:dashboard_ecomerce/controllers/category_controller.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class CategoryScreen extends StatefulWidget {
-   static const String id = '\category-screen'; 
+   static const String id = 'category-screen'; 
   const CategoryScreen({super.key});
 
   @override
@@ -11,7 +12,8 @@ class CategoryScreen extends StatefulWidget {
 
 class _CategoryScreenState extends State<CategoryScreen> {
   final GlobalKey<FormState> _formKey =  GlobalKey<FormState>();
-  late String categoryName;
+  final CategoryController _categoryController = CategoryController(); 
+  late String name;
   dynamic _bannerImage;
   dynamic _image;
   pickImage() async {
@@ -40,8 +42,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
   @override
   Widget build(BuildContext context) {
      return Form(
+      key: _formKey,
        child: Column(
-        key: _formKey,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
@@ -83,7 +85,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                   width: 200,
                   child: TextFormField(
                     onChanged: (value) {
-                      categoryName= value;
+                      name= value;
                     },
                     validator: (value) {
                       if(value!.isNotEmpty) {
@@ -100,12 +102,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 ),
               ),
               TextButton(
-                onPressed: () {
-                  if(_formKey.currentState!.validate()) {
-                    print(categoryName);
-
-                  }
-                }, 
+                onPressed: (){}, 
                 child: Text(
                   'cancel'
                 ),
@@ -114,7 +111,11 @@ class _CategoryScreenState extends State<CategoryScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),
-                onPressed: () {}, 
+                onPressed: ()  async{
+                  if(_formKey.currentState!.validate()) {
+                    await _categoryController.uploadCategory(pickedImage: _image, pickedBanner: _bannerImage, name: name, context: context);
+                  }
+                }, 
                   child: Text(
                     "Save", 
                     style: TextStyle(
