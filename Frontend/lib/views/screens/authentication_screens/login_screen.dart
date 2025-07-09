@@ -63,7 +63,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     fontSize: 14,
                   )
                 ),
-                Image.asset('assets/images/illustration.png',
+                Image.asset('assets/images/Illustration.png',
                   width: 200,
                   height: 200,
                 ),
@@ -291,15 +291,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                   ],
-                )
-               
-              ],
+                  )
+                ],
               ),
+            ),
           ),
         ),
-            ),
       ),
-      );
+    );
   }
 }
  

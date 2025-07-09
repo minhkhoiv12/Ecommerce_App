@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dashboard_ecomerce/global_variables.dart';
 import 'package:dashboard_ecomerce/models/category.dart';
@@ -39,4 +41,30 @@ class CategoryController {
       print('Lỗi upload lên cloudinary: $e');
     }
   }
+  Future<List<Category>> loadCategories() async {
+    try {
+      // send an http get request to load categories
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/categories'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      print(response.body);
+      if(response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        List<Category> categories = data.map((category) => Category.fromJson(category)).toList();
+        return categories;
+      }
+      else {
+        throw Exception('Load sản phẩm thất bại');
+      }
+    }
+    catch (e) {
+     throw Exception('Lỗi tải loại sản phẩm: $e');
+    }
+  }
 }
+
+
+

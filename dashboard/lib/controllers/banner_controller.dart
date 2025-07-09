@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dashboard_ecomerce/global_variables.dart';
 import 'package:dashboard_ecomerce/models/banner.dart';
@@ -31,6 +33,32 @@ class BannerController {
     }
     catch(e){
       print('Lỗi upload lên cloudinary: $e');
+    }
+  }
+
+  // fetch banners
+    Future<List<BannerModel>> loadBanners() async {
+    try {
+      http.Response response = await http.get(Uri.parse('$uri/api/banner'),
+        headers: <String, String>{
+          // Set the content type to application/json
+          'Content-Type': 'application/json; charset=UTF-8', // specify the content type as Json
+       }
+      );
+      print (response.body);
+      if(response.statusCode == 200){
+        List<dynamic> data = jsonDecode(response.body);
+        List<BannerModel> banners = data.map((banner) => BannerModel.fromJson(banner)).toList();
+        return banners;
+      }
+      else{
+        //throw an exception if server responsed with an error status code
+        throw Exception('Load banner thất bại');
+      }
+    }
+    catch(e){
+      throw Exception('Lỗi loading Banners $e');
+
     }
   }
 }

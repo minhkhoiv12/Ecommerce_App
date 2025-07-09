@@ -1,4 +1,5 @@
 import 'package:dashboard_ecomerce/controllers/banner_controller.dart';
+import 'package:dashboard_ecomerce/views/side_bar_screen/widgets/banner_widget.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
@@ -82,6 +83,11 @@ class _UploadBannerState extends State<UploadBanner> {
             child: Text('Thêm hình ảnh'),
             ),
         ),
+        Divider(
+          color: Colors.grey,
+          
+        ),
+        BannerWidget(),
       ],
      );
   }

@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     fontSize: 14,
                   )
                 ),
-                Image.asset('assets/images/illustration.png',
+                Image.asset('assets/images/Illustration.png',
                   width: 200,
                   height: 200,
                 ),
@@ -125,10 +125,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(
                   height: 20,
                 ),
-            
-            
-            
-            
                  Align(
                   alignment: Alignment.topLeft,
                   child: Text(
@@ -180,15 +176,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                   ),
                 ),
-                
-            
-            
-            
-            
-            
-            
-            
-            
                 SizedBox(
                   height: 20,
                 ),
@@ -241,7 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 InkWell(
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      registerUser();
+                      //registerUser();
                     }
                     
                   },
@@ -337,10 +324,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               fontSize: 18,
                             )
                            ),
-                         
-                          
                           ),
-                        
                       ],
                     ),
                   ),
@@ -365,22 +349,21 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       },
                       child: Text('Sign In',
                         style: GoogleFonts.roboto(
-                          fontWeight: FontWeight.w500,
-                          letterSpacing: 0.1,
-                          color: Color(0xFF102DE1),
+                            fontWeight: FontWeight.w500,
+                            letterSpacing: 0.1,
+                            color: Color(0xFF102DE1),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                )
-               
-              ],
+                    ],
+                  )
+                ],
               ),
+            ),
           ),
         ),
-            ),
       ),
-      );
+    );
   }
 }
  
