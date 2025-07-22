@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dashboard_ecomerce/global_variables.dart';
 import 'package:dashboard_ecomerce/models/subcategory.dart';
@@ -29,6 +31,29 @@ class SubcategoryController {
     catch(e){
       print("$e");
 
+    }
+  }
+  Future<List<Subcategory>> loadSubCategories() async {
+    try {
+      // send an http get request to load categories
+      http.Response response = await http.get(
+        Uri.parse('$uri/api/subcategories'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      print(response.body);
+      if(response.statusCode == 200) {
+        final List<dynamic> data = jsonDecode(response.body);
+        List<Subcategory> subcategories = data.map((subcategory) => Subcategory.fromJson(subcategory)).toList();
+        return subcategories;
+      }
+      else {
+        throw Exception('Load sản phẩm danh mục con thất bại');
+      }
+    }
+    catch (e) {
+     throw Exception('Lỗi tải sản phẩm danh mục con: $e');
     }
   }
 }
