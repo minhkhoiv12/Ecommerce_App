@@ -1,4 +1,5 @@
 import 'package:dashboard_ecomerce/controllers/category_controller.dart';
+import 'package:dashboard_ecomerce/controllers/subcategory_controller.dart';
 import 'package:dashboard_ecomerce/models/category.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ class SubcategoryScreen extends StatefulWidget {
 }
 
 class _SubcategoryScreenState extends State<SubcategoryScreen> {
+  final SubcategoryController subcategoryController = SubcategoryController();
   final GlobalKey<FormState> _formKey =  GlobalKey<FormState>();
   late Future<List<Category>> futureSubcategories;
   late String name;
@@ -80,6 +82,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
               }
               else{
                 return DropdownButton<Category>(
+                  value: selectedCategory,
                   hint: const Text('Chọn danh mục'),
                   items: snapshot.data!.map((Category category) {
                     return DropdownMenuItem<Category>(
@@ -137,9 +140,13 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,
                   ),
-                  onPressed: ()  async{
+                  onPressed: ()  async{ 
                     if(_formKey.currentState!.validate()) {
-                      
+                      await subcategoryController.uploadSubcategory(categoryId: selectedCategory!.id, categoryName: selectedCategory!.name, pickedImage: _image, subCategoryName: name, context: context);
+                      setState(() {
+                        _formKey.currentState!.reset();
+                        _image = null;
+                      });
                     }
                   }, 
                   child: Text(

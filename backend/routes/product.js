@@ -18,7 +18,7 @@ productRouter.get('/api/popular-products', async(req, res) => {
     try{
         const product = await Product.find({popular: true});
         if(!product || product.length ==0){
-            return res.status(404).json({msg: "products not found"});
+            return res.status(404).json({msg: "Không tìm thấy sản phẩm"});
         }
         else{
             return res.status(200).json({product});
@@ -34,7 +34,7 @@ productRouter.get('/api/recommended-products', async(req, res) => {
     try{
         const product = await Product.find({recommend: true});
         if(!product || product.length ==0){
-            return res.status(404).json({msg: "products not found"});
+            return res.status(404).json({msg: "Không tìm thấy sản phẩm"});
         }
         else{
             return res.status(201).json({product});
