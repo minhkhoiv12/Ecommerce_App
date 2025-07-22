@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 
 class CategoryScreen extends StatefulWidget {
-   static const String id = 'category-screen'; 
+   static const String id = 'categoryScreen'; 
   const CategoryScreen({super.key});
 
   @override

@@ -2,6 +2,7 @@ import 'package:dashboard_ecomerce/views/side_bar_screen/buyer_screen.dart';
 import 'package:dashboard_ecomerce/views/side_bar_screen/category_screen.dart';
 import 'package:dashboard_ecomerce/views/side_bar_screen/order_screen.dart';
 import 'package:dashboard_ecomerce/views/side_bar_screen/product_screen.dart';
+import 'package:dashboard_ecomerce/views/side_bar_screen/subcategory_screen.dart';
 import 'package:dashboard_ecomerce/views/side_bar_screen/upload_banner_screen.dart';
 import 'package:dashboard_ecomerce/views/side_bar_screen/vendor_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -39,13 +40,18 @@ class _MainScreenState extends State<MainScreen> {
 
       case CategoryScreen.id:
         setState(() {
-          _selectedScreen = CategoryScreen();
+          _selectedScreen = const CategoryScreen();
+        });
+        break;
+      case SubcategoryScreen.id:
+        setState(() {
+          _selectedScreen = const SubcategoryScreen();
         });
         break;
 
       case UploadBanner.id:
         setState(() {
-          _selectedScreen = UploadBanner();
+          _selectedScreen = const UploadBanner();
         });
         break;
     }
@@ -64,6 +70,7 @@ class _MainScreenState extends State<MainScreen> {
           AdminMenuItem(title: 'Buyer', route: BuyerScreen.id , icon: CupertinoIcons.person,),
           AdminMenuItem(title: 'Orders', route: OrderScreen.id, icon: CupertinoIcons.shopping_cart,),
           AdminMenuItem(title: 'Categories', route: CategoryScreen.id, icon: Icons.category,),
+          AdminMenuItem(title: 'Subcategories', route: SubcategoryScreen.id, icon: Icons.subdirectory_arrow_right,),
           AdminMenuItem(title: 'Upload Banner', route: UploadBanner.id, icon: Icons.upload,),
            AdminMenuItem(title: 'Products', route: ProductScreen.id, icon: Icons.store,),
         ],
