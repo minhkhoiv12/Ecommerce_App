@@ -1,3 +1,4 @@
+import 'package:bai1/views/screens/nav_screens/widgets/banner_widget.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 
@@ -7,11 +8,12 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-
       body: SingleChildScrollView(
         child: Column(
           children: [
-            HeaderWidget(),
+           HeaderWidget(),
+           BannerWidget(),
+          
           ],
         ),
       ),

@@ -228,7 +228,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 InkWell(
                   onTap: () async {
                     if (_formKey.currentState!.validate()) {
-                      //registerUser();
+                      registerUser();
                     }
                     
                   },

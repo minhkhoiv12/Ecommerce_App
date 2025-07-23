@@ -1,5 +1,4 @@
-import 'package:bai1/views/screens/authentication_screens/login_screen.dart';
-import 'package:bai1/views/screens/authentication_screens/register_screen.dart';
+
 import 'package:bai1/views/screens/main_screen.dart';
 import 'package:bai1/views/screens/nav_screens/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: LoginScreen(), // Change to MainScreen() to show the main screen
+      home: MainScreen(), // Change to MainScreen() to show the main screen
     );
   }
 }
