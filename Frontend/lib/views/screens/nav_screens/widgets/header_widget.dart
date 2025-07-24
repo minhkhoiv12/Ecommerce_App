@@ -7,7 +7,8 @@ class HeaderWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height *0.20,
+      //height: MediaQuery.of(context).size.height *0.20,
+      height: 130,
       child: Stack(
         children: [
           Image.asset('assets/icons/searchBanner.jpeg',

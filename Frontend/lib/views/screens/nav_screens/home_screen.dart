@@ -12,7 +12,7 @@ class HomeScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Column(
           children: [
-           HeaderWidget(),
+          HeaderWidget(),
           BannerWidget(),
           CategoryItemWidget(),
           ],
