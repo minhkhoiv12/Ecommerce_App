@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:bai1/models/user.dart';
 import 'package:bai1/services/manager_http_response.dart';
 import 'package:bai1/views/screens/authentication_screens/login_screen.dart';

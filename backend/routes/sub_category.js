@@ -31,7 +31,7 @@ subcategoryRouter.get('/api/category/:categoryName/subcategories', async(req, re
              return res.status(404).json({msg: "Không tìm thấy danh mục con"});
         }
         else {
-            return res.status(200).json({subcategories});
+            return res.status(200).json(subcategories);
         }
         
     }

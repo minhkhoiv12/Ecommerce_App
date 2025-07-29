@@ -1,5 +1,7 @@
 import 'package:bai1/controllers/category_controller.dart';
+import 'package:bai1/controllers/subcategory_controller.dart';
 import 'package:bai1/models/category.dart';
+import 'package:bai1/models/subcategory.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -15,14 +17,36 @@ class _CategoryScreenState extends State<CategoryScreen> {
    // A future that will hold the list of categories once loaded from API
     late Future<List<Category>> futureCategories;
     Category? _selectedCategory;
+    List<Subcategory> _subcategories = [];
+    final SubcategoryController _subcategoryController = SubcategoryController(); 
 
     @override
   void initState() {
     // TODO: implement initState
     super.initState();
     futureCategories = CategoryController().loadCategories();// để bắt đầu tải danh sách category từ API.
+    // once the categories are loaded process then
+    futureCategories.then((categories) {
+      //iterate the categories are loaded process then
+      for(var category in categories) {
+        if(category.name == 'Baby') {
+          setState(() {
+            _selectedCategory = category; // set the selected category to 'Baby'
+          });
+          _loadSubcategories(category.name); // load subcategories for 'Baby'
+        }
+      }
+
+    });
   }
   @override
+  // this will load subcategories base on the categoryName
+  Future<void> _loadSubcategories(String categoryName) async{
+    final subcategories = await _subcategoryController.getSubCategoriesByCategoryName(categoryName);
+    setState(() {
+      _subcategories = subcategories;
+    });
+  }
   Widget build(BuildContext context) {
     
     return Scaffold(
@@ -57,6 +81,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             setState(() {
                               _selectedCategory = category;
                             });
+                            _loadSubcategories(category.name);
                           },
                           title: Text(category.name,
                             style: GoogleFonts.quicksand(
@@ -99,7 +124,53 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       ),
                     ),
                   ),
-                )
+                ),
+                _subcategories.isNotEmpty? GridView.builder(
+                  shrinkWrap: true,
+                  itemCount: _subcategories.length,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 4,
+                    crossAxisSpacing: 8), 
+                  itemBuilder: (context, index){
+                    final subcategory = _subcategories[index];
+                    return Column(
+                      children: [
+                        Container(
+                          width: 50,
+                          height: 50,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade200,
+                          ),
+                          child: Center(
+                            child: Image.network(
+                              subcategory.image,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        Center(child: Text(
+                          subcategory.subCategoryName,
+                          style: GoogleFonts.quicksand(
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold,
+                          ),),
+                        )
+                      ],
+                    );
+                  })
+                  : Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(child: Text(
+                        "Không có danh mục con nào",
+                        style: GoogleFonts.quicksand(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.7,
+                        ),
+                      ),
+                    ),
+                  ),
               ],
             ):Container(
 
