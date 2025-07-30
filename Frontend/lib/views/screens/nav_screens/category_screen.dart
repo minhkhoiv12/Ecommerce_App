@@ -2,6 +2,7 @@ import 'package:bai1/controllers/category_controller.dart';
 import 'package:bai1/controllers/subcategory_controller.dart';
 import 'package:bai1/models/category.dart';
 import 'package:bai1/models/subcategory.dart';
+import 'package:bai1/views/screens/detail/screens/widgets/subcategory_title_widget.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -54,6 +55,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
         preferredSize: Size.fromHeight(130), 
         child: HeaderWidget()),
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           //left side - display categories
           Expanded(
@@ -100,78 +102,83 @@ class _CategoryScreenState extends State<CategoryScreen> {
           Expanded(
             flex: 5,
             child: _selectedCategory !=null
-            ? Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(_selectedCategory!.name,
-                    style: GoogleFonts.quicksand(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 1.7,    
-                    ),
-                  ),
-                  
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    height: 150,
-                    decoration: BoxDecoration(
-                      image: DecorationImage(image: NetworkImage(_selectedCategory!.banner),
-                      fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-                _subcategories.isNotEmpty? GridView.builder(
-                  shrinkWrap: true,
-                  itemCount: _subcategories.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: 4,
-                    crossAxisSpacing: 8), 
-                  itemBuilder: (context, index){
-                    final subcategory = _subcategories[index];
-                    return Column(
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.grey.shade200,
-                          ),
-                          child: Center(
-                            child: Image.network(
-                              subcategory.image,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        Center(child: Text(
-                          subcategory.subCategoryName,
-                          style: GoogleFonts.quicksand(
-                            fontSize: 12,
-                            fontWeight: FontWeight.bold,
-                          ),),
-                        )
-                      ],
-                    );
-                  })
-                  : Padding(
+            ? SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Center(child: Text(
-                        "Không có danh mục con nào",
-                        style: GoogleFonts.quicksand(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.7,
+                    child: Text(_selectedCategory!.name,
+                      style: GoogleFonts.quicksand(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.7,    
+                      ),
+                    ),
+                    
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(image: NetworkImage(_selectedCategory!.banner),
+                        fit: BoxFit.cover,
                         ),
                       ),
                     ),
                   ),
-              ],
+                  _subcategories.isNotEmpty? GridView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,// tự động điều chỉnh kích thước của GridView để phù hợp với nội dung bên trong
+                    itemCount: _subcategories.length,
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 4,
+                      crossAxisSpacing: 8,
+                      childAspectRatio: 2/2), 
+                    itemBuilder: (context, index){
+                      final subcategory = _subcategories[index];
+                      return SubcategoryTitleWidget(image: subcategory.image, title: subcategory.categoryName);
+                      // return Column(
+                      //   children: [
+                      //     Container(
+                      //       width: 50,
+                      //       height: 50,
+                      //       decoration: BoxDecoration(
+                      //         color: Colors.grey.shade200,
+                      //       ),
+                      //       child: Center(
+                      //         child: Image.network(
+                      //           subcategory.image,
+                      //           fit: BoxFit.cover,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //     Center(child: Text(
+                      //       subcategory.subCategoryName,
+                      //       style: GoogleFonts.quicksand(
+                      //         fontSize: 12,
+                      //         fontWeight: FontWeight.bold,
+                      //       ),),
+                      //     )
+                      //   ],
+                      // );
+                    })
+                    : Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Center(child: Text(
+                          "Không có danh mục con nào",
+                          style: GoogleFonts.quicksand(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1.7,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
             ):Container(
 
             ),

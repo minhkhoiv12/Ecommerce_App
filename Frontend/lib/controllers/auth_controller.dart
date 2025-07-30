@@ -1,12 +1,15 @@
 import 'dart:convert';
 import 'package:bai1/models/user.dart';
+import 'package:bai1/provider/user_provider.dart';
 import 'package:bai1/services/manager_http_response.dart';
 import 'package:bai1/views/screens/authentication_screens/login_screen.dart';
-import 'package:bai1/views/screens/authentication_screens/register_screen.dart';
 import 'package:bai1/views/screens/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:bai1/global_variables.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+final providerContainer = ProviderContainer();
 class AuthController {
   Future<void> signUpUsers({
     required BuildContext context,
@@ -55,7 +58,19 @@ class AuthController {
           'Content-Type': 'application/json; charset=UTF-8', // specify the content type as Json
         }
       );
-      manageHttpResponse(response: response, context: context, onSuccess: () {
+      manageHttpResponse(response: response, context: context, onSuccess: () async {
+        //Access sharedPreferences for token and user data storage
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        // Extract the authentication token from the response
+        String token = jsonDecode(response.body)['token'];
+        // Store the authentication token securely in SharedPreferences
+        await preferences.setString('auth_token', token);
+        //Encode the user data recived from the backend as json
+        final userJson = jsonEncode(jsonDecode(response.body)['user']);
+        //update the application state with the user data using Riverpod
+        providerContainer.read(userProvider.notifier).setUser(userJson);
+        //store the data in sharePreferences for future use
+        await preferences.setString('user', userJson);
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MainScreen()),
