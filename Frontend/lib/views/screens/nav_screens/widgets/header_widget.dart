@@ -88,7 +88,7 @@ class HeaderWidget extends StatelessWidget {
             ),
           ),
         ],
-      )
+      ),
     );
   }
 }
