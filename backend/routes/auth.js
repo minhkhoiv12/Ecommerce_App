@@ -48,7 +48,7 @@ authRouter.post('/api/signin', async (req, res) => {
                 const { password, ...userWithoutPassword } = findUser._doc;
                 // send teh response
                 return res.json({
-                    token, ...userWithoutPassword
+                    token, user:userWithoutPassword
                 });
             }
         }
