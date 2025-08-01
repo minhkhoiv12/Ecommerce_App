@@ -18,13 +18,21 @@ class MyApp extends ConsumerWidget {
     //obtain an instace of sharedPreferences for local data storage
     SharedPreferences preferences = await SharedPreferences.getInstance();
     //Retrive the authentication token and user data stored locally 
+    //Lấy dữ liệu token và user (dạng JSON) từ SharedPreferences.
     String? token = preferences.getString('auth_token');
     String? userJson = preferences.getString('user');
     //if both token and user data are avaible, update the user state
+    //Kiểm tra nếu cả token và userJson đều tồn tại, chứng tỏ người dùng đã đăng nhập trước đó
     if(token !=null && userJson !=null){
       ref.read(userProvider.notifier).setUser(userJson);
     }
+    else {
+      ref.read(userProvider.notifier).signOut();
+    }
   }
+  // Hàm _checkTokenAndSetUser được gọi khi khởi chạy app
+  // Kiểm tra xem người dùng có đăng nhập trước không.
+  // Nếu có, thì cập nhật lại userProvider với dữ liệu người dùng đã lưu → giúp ứng dụng không yêu cầu đăng nhập lại sau khi mở app.
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -55,6 +63,9 @@ class MyApp extends ConsumerWidget {
             child: CircularProgressIndicator(),
           );
         }
+        //Sau khi kiểm tra xong, lấy user từ userProvider.
+        //Nếu có user (đăng nhập rồi), chuyển đến MainScreen.
+        //Nếu không, chuyển đến LoginScreen.
         final user = ref.watch(userProvider);
         return user != null ? MainScreen() : LoginScreen();
 

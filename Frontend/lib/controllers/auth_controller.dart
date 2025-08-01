@@ -60,17 +60,23 @@ class AuthController {
       );
       manageHttpResponse(response: response, context: context, onSuccess: () async {
         //Access sharedPreferences for token and user data storage
+        // Khởi tạo sharedPreferences 
         SharedPreferences preferences = await SharedPreferences.getInstance();
         // Extract the authentication token from the response
         String token = jsonDecode(response.body)['token'];
         // Store the authentication token securely in SharedPreferences
-        await preferences.setString('auth_token', token);
+        await preferences.setString('auth_token', token);//Lưu token vào SharedPreferences
         //Encode the user data recived from the backend as json
         final userJson = jsonEncode(jsonDecode(response.body)['user']);
         //update the application state with the user data using Riverpod
-        providerContainer.read(userProvider.notifier).setUser(userJson);
+        providerContainer.read(userProvider.notifier).setUser(userJson);//Cập nhật trạng thái người dùng trong bộ nhớ (RAM)
+        // providerContainer object quản lý toàn bộ các provider trong ứng dụng 
+        // .read(...) Đọc dữ liệu từ một provider cụ thể
+        // .notifier Truy cập vào logic bên trong UserProvider (nơi có method setUser(...))
+        // .setUser(userJson) Gọi method setUser để cập nhật trạng thái của User trong app
         //store the data in sharePreferences for future use
-        await preferences.setString('user', userJson);
+        await preferences.setString('user', userJson);//Lưu userJson vào SharedPreferences để dùng lại sau khi mở lại app
+        //SharedPreferences không lưu được Map, phải chuyển thành String trước
         Navigator.pushAndRemoveUntil(
           context,
           MaterialPageRoute(builder: (context) => const MainScreen()),
@@ -84,6 +90,30 @@ class AuthController {
       // Handle any exceptions that occur during the sign-in process
       print('Error during sign-in: $e');
       // You can show a snackbar or dialog to inform the user about the error
+    }
+  }
+  //Sign out 
+  Future<void> signOutUser({
+    required BuildContext context
+  }) async {
+    try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      //clear the token and user from SharedPreferences
+      await preferences.remove('auth_token'); // Xóa token khỏi SharedPreferences
+      await preferences.remove('user'); // Xóa user khỏi SharedPreferences
+      //clear the user state
+      providerContainer.read(userProvider.notifier).signOut(); // Đặt lại trạng thái người dùng về null
+      //navigate the user back to the login screen
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginScreen()),
+        (route) => false,
+      );
+      showSnackBar(context, 'Đăng xuất thành công');
+
+    }
+    catch (e) {
+     showSnackBar(context, 'Lỗi khi đăng xuất');
     }
   }
 }
