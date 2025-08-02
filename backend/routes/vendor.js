@@ -19,7 +19,7 @@ vendorRouter.post('/api/vendor/signup', async (req, res) => {
                 email,
                 password: hashedPassword
             });
-            vendor = await Vendor.save();
+            vendor = await vendor.save();
             return res.json({vendor});
         }
     }
