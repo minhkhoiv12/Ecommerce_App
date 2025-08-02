@@ -48,7 +48,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Text("Create your account",
+              Text("Đăng ký tài khoản",
                 style:GoogleFonts.getFont(
                   'Lato',
                   color: Color(0xFF0d120E),
@@ -57,7 +57,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   fontSize: 23,
                   )
                 ),
-                Text("To Explore the world of Flutter",
+                Text("Khám phá những sản phẩm mới nhất",
                   style: GoogleFonts.getFont(
                     'Lato',
                     color: Color(0xFF0d120E),
@@ -89,7 +89,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Vui lòng diền email của bạn';
                     }
                     // Simple email validation
                     else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
@@ -108,7 +108,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your email',
+                    labelText: 'Vui lòng nhập email',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
@@ -206,7 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your password',
+                    labelText: 'Vui lòng nhập mật khẩu',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
