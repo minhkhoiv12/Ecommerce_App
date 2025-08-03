@@ -45,9 +45,9 @@ class Vendor {
   }
   // fromJson: This factory contructor takes Json String , and decodes into a Map<String, dynamic>
   // and then uses fromMap to covert thap Map into a User object.
-  // factory Vendor.fromJson(String source) {
-  //   return Vendor.fromMap(json.decode(source) as Map<String, dynamic>);//decode chuyển chuỗi JSON → Map/List
-  // }
+  factory Vendor.fromJson(String source) {
+    return Vendor.fromMap(json.decode(source) as Map<String, dynamic>);//decode chuyển chuỗi JSON → Map/List
+  }
 
   
   
