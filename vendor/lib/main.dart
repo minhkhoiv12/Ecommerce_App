@@ -1,16 +1,41 @@
 import 'package:flutter/material.dart';
-import 'package:vendor/views/screens/authentication/register_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:vendor/provider/vendor_provider.dart';
+import 'package:vendor/views/screens/authentication/login_screen.dart';
+import 'package:vendor/views/screens/main_vendor_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ProviderScope(child: const MyApp()));
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
+  // Method to check the token and set the user data if available
+  Future<void> checkTokenAndSetUser(WidgetRef ref) async {
+    //obtain an instace of sharedPreferences for local data storage
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    //Retrive the authentication token and user data stored locally 
+    //Lấy dữ liệu token và user (dạng JSON) từ SharedPreferences.
+    String? token = preferences.getString('auth_token');
+    String? vendorJson = preferences.getString('vendor');
+    //if both token and user data are avaible, update the user state
+    //Kiểm tra nếu cả token và userJson đều tồn tại, chứng tỏ người dùng đã đăng nhập trước đó
+    if(token !=null && vendorJson !=null){
+      ref.read(vendorProvider.notifier).setVendor(vendorJson);
+    }
+    else {
+      ref.read(vendorProvider.notifier).signOut();
+    }
+  }
+  // Hàm _checkTokenAndSetUser được gọi khi khởi chạy app
+  // Kiểm tra xem người dùng có đăng nhập trước không.
+  // Nếu có, thì cập nhật lại userProvider với dữ liệu người dùng đã lưu → giúp ứng dụng không yêu cầu đăng nhập lại sau khi mở app.
+  // This widget is the root of your application.
 
   // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -31,7 +56,20 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home: RegisterScreen(),
+      home: FutureBuilder(future: checkTokenAndSetUser(ref), builder: (context, snapshot){
+        if(snapshot.connectionState == ConnectionState.waiting){
+          return Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+        //Sau khi kiểm tra xong, lấy user từ userProvider.
+        //Nếu có user (đăng nhập rồi), chuyển đến MainScreen.
+        //Nếu không, chuyển đến LoginScreen.
+        final vendor = ref.watch(vendorProvider);
+        return vendor != null ? const MainVendorScreen() : const LoginScreen();
+
+
+      }), // Change to MainScreen() to show the main screen
     );
   }
 }
