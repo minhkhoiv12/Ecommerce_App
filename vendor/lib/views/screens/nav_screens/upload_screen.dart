@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:vendor/controllers/category_controller.dart';
+import 'package:vendor/controllers/subcategory_controller.dart';
+import 'package:vendor/models/category.dart';
+import 'package:vendor/models/subcategory.dart';
 
 class UploadScreen extends StatefulWidget {
   const UploadScreen({super.key});
@@ -11,6 +15,18 @@ class UploadScreen extends StatefulWidget {
 }
 
 class _UploadScreenState extends State<UploadScreen> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  late Future<List<Category>> futureCategories;
+  Future<List<Subcategory>>? futureSubcategories;
+  late String name;
+  Category? selectedCategory;
+  Subcategory? selectedSubcategory;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    futureCategories = CategoryController().loadCategories();
+  }
   //Create an inatance of imagePicker to handle image selection
   final ImagePicker picker =ImagePicker();
   //initialize an empty list to store the selected images
@@ -31,98 +47,242 @@ class _UploadScreenState extends State<UploadScreen> {
     }
 
   }
+  getSubcategoryByCategory(value){
+    // fetch subcategories based on the selected category
+    futureSubcategories = SubcategoryController().getSubCategoriesByCategoryName(value.name);
+    // reset the selected subcategory to null
+    selectedSubcategory = null;
+  }
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        GridView.builder(
-          shrinkWrap: true,
-          itemCount: images.length+1,
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-            childAspectRatio: 1.0,
-          ),
-          itemBuilder: (context, index){
-            // if the index is 0, display an iconbutton to add a new image
-            return index ==0 ? Center(
-              child: IconButton(
-                onPressed: (){}, icon: Icon(Icons.add),
-                ),
-            ): SizedBox(
-              width: 50,
-              height: 40,
-              child: Image.file(images[index-1]),
-            );
-          }),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  width: 200,
-                  child: TextFormField(
-                    decoration:  InputDecoration(
-                      labelText: "Nhập sản phẩm",
-                      hintText: "Nhập tên sản phẩm",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: 200,
-                  child: TextFormField(
-                    decoration:  InputDecoration(
-                      labelText: "Nhập giá sản phẩm",
-                      hintText: "Nhập giá sản phẩm",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: 200,
-                  child: TextFormField(
-                    decoration:  InputDecoration(
-                      labelText: "Nhập số lượng sản phẩm",
-                      hintText: "Nhập số lượng sản phẩm",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1),
-                      ),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: 400,
-                  child: TextFormField(
-                    maxLines: 3,
-                    maxLength: 500,
-                    decoration:  InputDecoration(
-                      labelText: "Nhập mô tả sản phẩm",
-                      hintText: "Nhập mô tả sản phẩm",
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                        borderSide: BorderSide(color: Colors.grey, width: 1),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+    return Form(
+      key: _formKey,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          GridView.builder(
+            shrinkWrap: true,
+            itemCount: images.length+1,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3,
+              mainAxisSpacing: 4.0,
+              crossAxisSpacing: 4.0,
+              childAspectRatio: 1.0,
             ),
+            itemBuilder: (context, index){
+              // if the index is 0, display an iconbutton to add a new image
+              return index ==0 ? Center(
+                child: IconButton(
+                  onPressed: (){}, icon: Icon(Icons.add),
+                  ),
+              ): SizedBox(
+                width: 50,
+                height: 40,
+                child: Image.file(images[index-1]),
+              );
+            }),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: TextFormField(
+                      validator: (value) {
+                        if(value!.isEmpty) {
+                          return 'Vui lòng nhập tên sản phẩm';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Nhập sản phẩm",
+                        hintText: "Nhập tên sản phẩm",
+                        border: OutlineInputBorder(
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 200,
+                    child: TextFormField(
+                      validator: (value) {
+                        if(value!.isEmpty) {
+                          return 'Vui lòng nhập giá sản phẩm';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Nhập giá sản phẩm",
+                        hintText: "Nhập giá sản phẩm",
+                        border: OutlineInputBorder(
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 200,
+                    child: TextFormField(
+                      validator: (value) {
+                        if(value!.isEmpty) {
+                          return 'Vui lòng nhập số lượng sản phẩm';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Nhập số lượng sản phẩm",
+                        hintText: "Nhập số lượng sản phẩm",
+                        border: OutlineInputBorder(
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    width: 400,
+                    child: TextFormField(
+                      validator: (value) {
+                        if(value!.isEmpty) {
+                          return 'Vui lòng nhập mô tả sản phẩm';
+                        }
+                        return null;
+                      },
+                      maxLines: 3,
+                      maxLength: 500,
+                      decoration: const InputDecoration(
+                        labelText: "Nhập mô tả sản phẩm",
+                        hintText: "Nhập mô tả sản phẩm",
+                        border: OutlineInputBorder(
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 200,
+                    child: FutureBuilder(
+                      future: futureCategories, 
+                      builder: (context, snapshot) {
+                        if(snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        else if (snapshot.hasError){
+                          return Center(
+                            child: Text('Lỗi ${snapshot.error}'),
+                          );
+                        }
+                        else if(!snapshot.hasData|| snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text('Không có danh mục con nào'),
+                          );
+                        }
+                        else{
+                          return DropdownButton<Category>(
+                            value: selectedCategory,
+                            hint: const Text('Chọn danh mục'),
+                            items: snapshot.data!.map((Category category) {
+                              return DropdownMenuItem<Category>(
+                                value: category,
+                                child: Text(category.name),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedCategory = value;
+                               // print(selectedCategory!.name);
+                              });
+                              getSubcategoryByCategory(selectedCategory);
+                            },
+                          );
+                        }
+                      }
+                    ),
+                  ),
+                   SizedBox(
+                    width: 200,
+                     child: FutureBuilder(
+                      future: futureSubcategories, 
+                      builder: (context, snapshot) {
+                        if(snapshot.connectionState == ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        else if (snapshot.hasError){
+                          return Center(
+                            child: Text('Lỗi ${snapshot.error}'),
+                          );
+                        }
+                        else if(!snapshot.hasData|| snapshot.data!.isEmpty) {
+                          return const Center(
+                            child: Text('Không có danh mục con nào'),
+                          );
+                        }
+                        else{
+                          return DropdownButton<Subcategory>(
+                            value: selectedSubcategory,
+                            hint: const Text('Chọn danh mục con'),
+                            items: snapshot.data!.map((Subcategory subcategory) {
+                              return DropdownMenuItem<Subcategory>(
+                                value: subcategory,
+                                child: Text(subcategory.subCategoryName),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                selectedSubcategory = value;
+                               // print(selectedCategory!.name);
+                              });
+                             // getSubcategoryByCategory(selectedCategory);
+                            },
+                          );
+                        }
+                      }
+                                     ),
+                   ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(15.0),
+              child: InkWell(
+                onTap: () {
+                  if(_formKey.currentState!.validate()) {
+                    // Call the upload function here
+                    // UploadController().uploadProduct(name, price, quantity, description, selectedCategory, selectedSubcategory, images);
+                    print('Upload thành công');
+                  } else {
+                    print('Vui lòng điền đầy đủ thông tin');
+                  }
+      
+                },
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.blue.shade900,
+                    borderRadius: BorderRadius.circular(5),
+                    
+                ),
+                child: const Center(
+                  child: Text(
+                    "Tải sản phẩm lên",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.7,
+                    ),
+                  ),
+                ),
+                          ),
+              ),
           )
-      ],
+        ],
+      ),
     );
   }
 } 
