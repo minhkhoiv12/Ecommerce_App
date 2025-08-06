@@ -49,7 +49,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
     });
   }
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(130), 
@@ -136,7 +135,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       crossAxisCount: 3,
                       mainAxisSpacing: 4,
                       crossAxisSpacing: 8,
-                      childAspectRatio: 2/2), 
+                      childAspectRatio: 3/4), 
                     itemBuilder: (context, index){
                       final subcategory = _subcategories[index];
                       return SubcategoryTitleWidget(image: subcategory.image, title: subcategory.categoryName);

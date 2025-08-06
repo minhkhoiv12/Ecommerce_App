@@ -6,7 +6,7 @@ import 'package:vendor/views/screens/authentication/login_screen.dart';
 import 'package:vendor/views/screens/main_vendor_screen.dart';
 
 void main() {
-  runApp(ProviderScope(child: const MyApp()));
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends ConsumerWidget {
