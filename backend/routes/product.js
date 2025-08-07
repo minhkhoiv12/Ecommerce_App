@@ -7,7 +7,7 @@ productRouter.post('/api/add-product', async(req, res) => {
         const {productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images} = req.body;
         let product = new Product({productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images});
          product = await product.save();
-         return res.status(201).json({product});
+         return res.status(201).json(product);
     }
     catch(e) {
         return res.status(500).json({error: e.message});

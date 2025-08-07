@@ -1,6 +1,8 @@
 import 'package:bai1/views/screens/nav_screens/widgets/banner_widget.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/category_item_widget.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/header_widget.dart';
+import 'package:bai1/views/screens/nav_screens/widgets/popular_product_widget.dart';
+import 'package:bai1/views/screens/nav_screens/widgets/reusable_text_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -15,6 +17,9 @@ class HomeScreen extends StatelessWidget {
           HeaderWidget(),
           BannerWidget(),
           CategoryItemWidget(),
+          ReusableTextWidget(title: 'Sản phẩm phổ biến', subtitle: 'Xem tất cả'),
+          PopularProductWidget(),
+          
           ],
         ),
       ),
