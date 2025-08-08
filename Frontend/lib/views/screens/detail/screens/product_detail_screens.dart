@@ -123,7 +123,7 @@ class _ProductDetailScreensState extends State<ProductDetailScreens> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Về",
+                Text("Mô tả",
                   style: GoogleFonts.lato(
                     fontSize: 17,
                     letterSpacing: 1.7,
