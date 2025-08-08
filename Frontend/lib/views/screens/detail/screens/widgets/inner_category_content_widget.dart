@@ -1,9 +1,13 @@
+import 'package:bai1/controllers/product_controller.dart';
 import 'package:bai1/controllers/subcategory_controller.dart';
 import 'package:bai1/models/category.dart';
+import 'package:bai1/models/product.dart';
 import 'package:bai1/models/subcategory.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/inner_banner_widget.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/inner_header_widget.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/subcategory_title_widget.dart';
+import 'package:bai1/views/screens/nav_screens/widgets/product_item_widget.dart';
+import 'package:bai1/views/screens/nav_screens/widgets/reusable_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -19,12 +23,15 @@ class InnerCategoryContentWidget extends StatefulWidget {
 
 class _InnerCategoryContentWidgetState extends State<InnerCategoryContentWidget> {
   late Future<List<Subcategory>> _subcategories;
+  late Future<List<Product>> futureProducts;
   final SubcategoryController _subcategoryController = SubcategoryController();
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     _subcategories = _subcategoryController.getSubCategoriesByCategoryName(widget.category.name);
+    futureProducts = ProductController().loadProductByCategory(widget.category.name);
+
   }
   @override
   Widget build(BuildContext context) {
@@ -112,7 +119,37 @@ class _InnerCategoryContentWidgetState extends State<InnerCategoryContentWidget>
                 }
         
             }
-        ),
+          ),
+          const ReusableTextWidget(title: 'Sản phẩm phổ biến', subtitle: 'Xem tất cả'),
+          FutureBuilder(
+            future: futureProducts, 
+            builder: (context, snapshot){
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Lỗi: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return const Center(child: Text('Không có sản phẩm nào trong danh mục này'));
+              } else 
+              {
+                final products = snapshot.data;
+                return SizedBox(
+                  height: 250,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: products!.length,
+                  // shrinkWrap: true,
+                  // physics: const NeverScrollableScrollPhysics(),
+                    itemBuilder: (context, index) {
+                      final product = products[index];
+                      //return Text(product.productName);
+                      return ProductItemWidget(product: product,);
+                  
+                    },
+                  ),
+                );
+              }
+            }),
           ],
         ),
       )

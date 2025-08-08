@@ -7,7 +7,7 @@ productRouter.post('/api/add-product', async(req, res) => {
         const {productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images} = req.body;
         let product = new Product({productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images});
          product = await product.save();
-         return res.status(201).json(product);
+         return res.status(201).send(product);
     }
     catch(e) {
         return res.status(500).json({error: e.message});
@@ -21,7 +21,7 @@ productRouter.get('/api/popular-products', async(req, res) => {
             return res.status(404).json({msg: "Không tìm thấy sản phẩm"});
         }
         else{
-            return res.status(200).json({product});
+            return res.status(200).json(product);
         }
     }
     catch(e) {
@@ -45,4 +45,20 @@ productRouter.get('/api/recommended-products', async(req, res) => {
 
     }
 });
+// new route for retrieving products by category
+productRouter.get('/api/products-by-category/:category', async(req, res) => {
+    try {
+        const {category} = req.params;
+        const products = await Product.find({category,popular: true});
+        if(!products || products.length == 0) {
+            return res.status(404).json({msg: "Không tìm thấy sản phẩm trong danh mục này"});
+        }
+        else {
+            return res.status(200).json(products);
+        }
+    }
+    catch(error) {
+        return res.status(500).json({error: e.message});
+    }
+})
 module.exports = productRouter;
