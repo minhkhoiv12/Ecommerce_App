@@ -5,7 +5,7 @@ class Cart {
   final List<String> image;
   final String vendorId;
   final int productQuantity;
-  final int quantity;
+  int quantity;
   final String productId;
   final String description;
   final String fullName;
