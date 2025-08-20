@@ -43,7 +43,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 child: Stack(
                   children: [
                     Image.asset(
-                      'assets/cions/not.png',
+                      'assets/icons/not.png',
                       width: 25,
                       height: 25,
                     ),
@@ -175,12 +175,15 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: 100,
-                          width: 100,
-                          child: Image.network(
-                            cartItem.image[0],
-                            fit: BoxFit.cover,
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: SizedBox(
+                            height: 100,
+                            width: 100,
+                            child: Image.network(
+                              cartItem.image[0],
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         Column(
@@ -311,9 +314,12 @@ class _CartScreenState extends ConsumerState<CartScreen> {
               alignment: Alignment(0.83, -1),
               child: InkWell(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context){
-                    return CheckoutScreen();
-                  }));
+                  Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const CheckoutScreen(),
+      ),
+    );
                 },
                 child: Container(
                   width: 166,
