@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:bai1/global_variables.dart';
 import 'package:bai1/models/category.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 class CategoryController {
   Future<List<Category>> loadCategories() async {

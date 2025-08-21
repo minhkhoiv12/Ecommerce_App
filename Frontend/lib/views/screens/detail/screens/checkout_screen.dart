@@ -1,5 +1,8 @@
 
+import 'package:bai1/controllers/order_controller.dart';
 import 'package:bai1/provider/cart_provider.dart';
+import 'package:bai1/provider/user_provider.dart';
+import 'package:bai1/views/screens/detail/screens/shipping_adress_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,9 +16,11 @@ class CheckoutScreen extends ConsumerStatefulWidget {
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   String selectedPaymentMethod = 'stripe';
+  final OrderController _orderController = OrderController();
   @override
   Widget build(BuildContext context) {
     final cartData = ref.read(cartProvider);
+    final _cartProvider = ref.read(cartProvider.notifier);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Thanh toán'),
@@ -31,7 +36,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
             children: [
               InkWell(
                 onTap: (){
-
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return ShippingAdressScreen();
+                  }));
                 },
                 child: SizedBox(
                   width: 335,
@@ -314,7 +321,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                 ),
                 RadioListTile<String>(
                  // subtitle: Icon(Icons.delivery_dining),
-                  title: Text('Trả tiền mặt',
+                  title: Text('tiền mặt',
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.bold,
 
@@ -323,9 +330,76 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   value: 'tiền mặt', 
                   groupValue: selectedPaymentMethod, 
                   onChanged: (String? value){
-                    selectedPaymentMethod = value!;
+                    setState(() {
+                      selectedPaymentMethod = value!;
+                    });
                   })
             ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ref.read(userProvider)!.state==""?TextButton(
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context){
+              return const ShippingAdressScreen();
+            }));
+          }, 
+          child: Text("Vui lòng nhập địa chỉ của bạn",
+            style: GoogleFonts.montserrat(
+              fontWeight: FontWeight.bold,
+              fontSize: 17,
+
+            ),
+          )
+        ): 
+        InkWell(
+          onTap: () async{
+            if(selectedPaymentMethod=='stripe'){
+              //pay with stripe to place the order
+
+            }
+            else {
+              await Future.forEach(_cartProvider.getCartItems.entries, (entry){
+                var item = entry.value;
+               _orderController.uploadOrders(
+                  id: '', 
+                  fullName: ref.read(userProvider)!.fullName, 
+                  email: ref.read(userProvider)!.email, 
+                  state: 'VietNam', 
+                  city: 'Thành Phố Hồ Chí Minh', 
+                  locality: 'Test', 
+                  productName: item.productName, 
+                  productPrice: item.productPrice, 
+                  quantity: item.quantity, 
+                  category: item.category, 
+                  image: item.image[0], 
+                  buyerId: ref.read(userProvider)!.id, 
+                  vendorId: item.vendorId, 
+                  processing: true, 
+                  delivered: false, 
+                  context: context);
+              });
+            }
+          },
+          child: Container(
+            width: 338,
+            height: 58,
+            decoration: BoxDecoration(
+              color:const  Color(0xFF3854EE),
+              borderRadius: BorderRadius.circular(15),
+            ),
+            child: Center(
+              child: Text(selectedPaymentMethod=='stripe'?'Thanh toán ngay': 'Đặt hàng',
+                style: GoogleFonts.montserrat(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+          
+                ),
+              ),
+            ),
           ),
         ),
       ),

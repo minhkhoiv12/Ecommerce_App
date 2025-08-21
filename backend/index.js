@@ -10,6 +10,7 @@ const subCategoryRouter = require('./routes/sub_category');
 const productRouter = require('./routes/product');
 const productReviewRouter = require('./routes/product_review');
 const vendorRouter = require('./routes/vendor'); 
+const orderRouter = require('./routes/order');
 const PORT = process.env.PORT || 3000;
 dotenv.config({
   path: "config/config.env",
@@ -23,6 +24,7 @@ app.use(subCategoryRouter);
 app.use(productRouter);
 app.use(productReviewRouter);
 app.use(vendorRouter);
+app.use(orderRouter);
 mongoose.connect(process.env.DB, {
   useNewUrlParser: true,
   useUnifiedTopology: true
