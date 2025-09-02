@@ -8,7 +8,7 @@ import 'package:dashboard_ecomerce/services/manager_http_response.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 class BannerController {
-  uploadCategory({required dynamic pickedImage, required BuildContext context,})async {
+  uploadCategory({required dynamic pickedImage, required context,})async {
     try {
      final cloudinary = CloudinaryPublic('dqtjhtikp', 'upload1');
      CloudinaryResponse imageResponse = await cloudinary.uploadFile(

@@ -1,9 +1,9 @@
-
 import 'package:bai1/controllers/order_controller.dart';
 import 'package:bai1/provider/cart_provider.dart';
 import 'package:bai1/provider/user_provider.dart';
-import 'package:bai1/views/screens/detail/screens/shipping_adress_screen.dart';
+import 'package:bai1/views/screens/detail/screens/shipping_address_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,7 +11,7 @@ class CheckoutScreen extends ConsumerStatefulWidget {
   const CheckoutScreen({super.key});
 
   @override
-  _CheckoutScreenState createState() => _CheckoutScreenState();
+  ConsumerState<CheckoutScreen> createState() => _CheckoutScreenState();
 }
 
 class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
@@ -21,175 +21,203 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
   Widget build(BuildContext context) {
     final cartData = ref.read(cartProvider);
     final _cartProvider = ref.read(cartProvider.notifier);
+    final user = ref.watch(userProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Thanh toán'),
+        title: Text('Checkout Screen'),
       ),
       body: Padding(
-        padding:const EdgeInsets.symmetric(
-          horizontal: 25, 
-          vertical: 15,
-        ),
-        child: Center(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context){
-                    return ShippingAdressScreen();
-                  }));
-                },
-                child: SizedBox(
-                  width: 335,
-                  height: 74,
-                  child: Stack(
-                    clipBehavior: Clip.none,
-                    children: [
-                      Positioned(
-                        left: 0,
-                        top: 0,
-                        child: Container(
-                          width: 335,
-                          height: 74,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color:  const Color(0xFFEFF0F2,),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 25.0, 
+          vertical: 15.0
+          ),
+          child: Center(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: (){
+                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                      return const ShippingAddressScreen();
+                    }));
+                  },
+                  child: SizedBox(
+                    width: 335,
+                    height: 74,
+                    child: Stack(
+                      clipBehavior: Clip.none,
+                      children: [
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          child: Container(
+                            width: 335,
+                            height: 74,
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border.all(
+                                color: const Color(0xFFEFF0F2),
+                              ),
+                              borderRadius: BorderRadius.circular(12),
                             ),
-                            borderRadius: BorderRadius.circular(12),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        left: 70,
-                        top: 17,
-                        child: SizedBox(
-                          width: 215,
-                          height: 41,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Positioned(
-                                top: -1,
-                                left: -1,
-                                child: SizedBox(
-                                  width: 219,
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      const Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: SizedBox(
-                                          width: 114,
-                                          child: Text(
-                                            'Thêm địa chỉ',
-                                            style: TextStyle(
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.bold,
-                                              height: 1.1,
+                        Positioned(
+                          left: 70,
+                          top: 17,
+                          child: SizedBox(
+                            width: 215,
+                            height: 41,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  top: -1,
+                                  left: -1,
+                                  child: SizedBox(
+                                    width: 219,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: SizedBox(
+                                            width: 114,
+                                            child: (user != null && user.state.isNotEmpty) ?
+                                            const Text(
+                                              'Địa chỉ',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1.1,
+                                              ),
+                                            ):
+                                            const Text(
+                                              'Thêm địa chỉ',
+                                              style: TextStyle(
+                                                fontSize: 14,
+                                                fontWeight: FontWeight.bold,
+                                                height: 1.1,
+                                              ),
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      const SizedBox(
-                                        height: 4,
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'VietNam',
-                                          style: GoogleFonts.lato(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1.3,
+                                        const SizedBox(
+                                          height: 4,
+                                        ),
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: (user != null && user.state.isNotEmpty) ?
+                                          //user!.state.isNotEmpty? 
+                                          Text(
+                                            user.state,
+                                            style: GoogleFonts.lato(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.3,
+                                            ),
+                                          ):
+                                          Text(
+                                            'Viet Nam',
+                                            style: GoogleFonts.lato(
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.bold,
+                                              letterSpacing: 1.3,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                      Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Text(
-                                          'Nhập tên thành phố',
-                                          style: GoogleFonts.lato(
-                                            color: const Color(0xFF7F808C),
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 12,
+                                        Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: (user != null && user.city.isNotEmpty) ?
+                                          //user.city.isNotEmpty? 
+                                          Text(
+                                            user.city,
+                                            style: GoogleFonts.lato(
+                                              color: const Color(0xFF7F808C),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                            ),
+                                          ):
+                                           Text(
+                                            'Nhập tên thành phố',
+                                            style: GoogleFonts.lato(
+                                              color: const Color(0xFF7F808C),
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 12,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                        top: 16,
-                        left: 16,
-                        child: SizedBox.square(
-                          dimension: 42,
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Positioned(
-                                left: 0,
-                                top: 0,
-                                child:Container(
-                                  width: 43,
-                                  height: 43,
-                                  clipBehavior: Clip.hardEdge,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFFFBF7F5),
-                                    borderRadius: BorderRadius.circular(100),
-                                  ),
-                                  child: Stack(
+                        Positioned(
+                          top: 16,
+                          left: 16,
+                          child: SizedBox.square(
+                            dimension: 42,
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Positioned(
+                                  left: 0,
+                                  top: 0,
+                                  child:Container(
+                                    width: 43,
+                                    height: 43,
                                     clipBehavior: Clip.hardEdge,
-                                    children: [
-                                      Positioned(
-                                        left: 11,
-                                        top: 11,
-                                        child: Image.network(
-                                          width: 26,
-                                          height: 26,
-                                          'https://storage.googleapis.com/codeless-dev.appspot.com/uploads%2Fimages%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F2ee3a5ce3b02828d0e2806584a6baa88.png'
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFFFBF7F5),
+                                      borderRadius: BorderRadius.circular(100),
+                                    ),
+                                    child: Stack(
+                                      clipBehavior: Clip.hardEdge,
+                                      children: [
+                                        Positioned(
+                                          left: 11,
+                                          top: 11,
+                                          child: Image.network(
+                                            width: 26,
+                                            height: 26,
+                                            'https://storage.googleapis.com/codeless-dev.appspot.com/uploads%2Fimages%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F2ee3a5ce3b02828d0e2806584a6baa88.png'
+                                          ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 ),
-
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
+                        ),
 
-                        ),
-                      ),
-                      Positioned(
-                        left: 305,
-                        top: 25,
-                        child: 
-                        Image.network(
-                          width: 20,
-                          height: 20,
-                          'https://firebasestorage.googleapis.com/v0/b/codeless-app.appspot.com/o/projects%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F6ce18a0efc6e889de2f2878027c689c9caa53feeedit%201.png?alt=media&token=a3a8a999-80d5-4a2e-a9b7-a43a7fa8789a',
-                        ),
-                      ),
-                    ],
-                  )
+                        Positioned(
+                          left: 305,
+                          top: 25,
+                          child: Image.network(
+                            width: 20,
+                            height: 20,
+                            'https://firebasestorage.googleapis.com/v0/b/codeless-app.appspot.com/o/projects%2Fnn2Ldqjoc2Xp89Y7Wfzf%2F6ce18a0efc6e889de2f2878027c689c9caa53feeedit%201.png?alt=media&token=a3a8a999-80d5-4a2e-a9b7-a43a7fa8789a',
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text('Sản phẩm của bạn',
-                style: GoogleFonts.quicksand(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                SizedBox(
+                  height: 10,
                 ),
-              ),
-              Flexible(
+                Text('Sản phẩm của bạn',
+                  style: GoogleFonts.quicksand(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Flexible(
                 child: ListView.builder(
                   itemCount: cartData.length,
                   shrinkWrap: true,
@@ -206,7 +234,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                             color: const Color(0xFFEFF0F2)
                           ), 
                           borderRadius: BorderRadius.circular(12),
-
                         ),
                         child: Stack(
                           clipBehavior:  Clip.none,
@@ -229,7 +256,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                                       child: Image.network(cartItem.image[0],
                                        fit: BoxFit.cover,
                                       ),
-
                                     ),
                                     const SizedBox(
                                       width: 11,
@@ -289,7 +315,6 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                               ),
                             ),
                           ],
-
                         ),
                       ),
                     );
@@ -317,11 +342,11 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     setState(() {
                       selectedPaymentMethod = value!;
                     });
-                  }
+                  },
                 ),
                 RadioListTile<String>(
                  // subtitle: Icon(Icons.delivery_dining),
-                  title: Text('tiền mặt',
+                  title: Text('Tiền mặt',
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.bold,
 
@@ -333,37 +358,38 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                     setState(() {
                       selectedPaymentMethod = value!;
                     });
-                  })
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ref.read(userProvider)!.state==""?TextButton(
-          onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context){
-              return const ShippingAdressScreen();
-            }));
-          }, 
-          child: Text("Vui lòng nhập địa chỉ của bạn",
-            style: GoogleFonts.montserrat(
-              fontWeight: FontWeight.bold,
-              fontSize: 17,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: user == null || user.state.isEmpty ?
+            TextButton(
+              onPressed: (){
+                 Navigator.push(context, MaterialPageRoute(builder: (context){
+                  return const ShippingAddressScreen();
+                }));
 
-            ),
-          )
-        ): 
-        InkWell(
-          onTap: () async{
-            if(selectedPaymentMethod=='stripe'){
-              //pay with stripe to place the order
-
-            }
-            else {
-              await Future.forEach(_cartProvider.getCartItems.entries, (entry){
-                var item = entry.value;
-               _orderController.uploadOrders(
+              }, 
+              child: Text('Vui lòng nhập địa chỉ nhận hàng',
+                style: GoogleFonts.montserrat(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ):
+           InkWell(
+            onTap: () async{
+              if(selectedPaymentMethod =='stripe'){
+                //pay with stripe to place the order
+              }
+              else {
+                await Future.forEach(_cartProvider.getCartItems.entries, (entry){
+                  var item = entry.value;
+                  _orderController.uploadOrders(
                   id: '', 
                   fullName: ref.read(userProvider)!.fullName, 
                   email: ref.read(userProvider)!.email, 
@@ -380,29 +406,32 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   processing: true, 
                   delivered: false, 
                   context: context);
-              });
-            }
-          },
-          child: Container(
-            width: 338,
-            height: 58,
-            decoration: BoxDecoration(
-              color:const  Color(0xFF3854EE),
-              borderRadius: BorderRadius.circular(15),
-            ),
-            child: Center(
-              child: Text(selectedPaymentMethod=='stripe'?'Thanh toán ngay': 'Đặt hàng',
-                style: GoogleFonts.montserrat(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-          
+                });
+              }
+            },
+            child: Container(
+              width: 338,
+              height: 58,
+              decoration: BoxDecoration(
+                color: const Color(0xFF3854EE),
+                borderRadius: BorderRadius.circular(
+                  15
+                ),
+              ),
+              child: Center(
+                child: Text(selectedPaymentMethod =='stripe' ?
+                  'Thanh toán ngay': 'Xác nhận đơn hàng',
+                  style: GoogleFonts.montserrat(
+                    color: Colors.white,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ),
+        )
     );
   }
 }

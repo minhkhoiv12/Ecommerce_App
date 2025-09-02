@@ -4,11 +4,9 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dashboard_ecomerce/global_variables.dart';
 import 'package:dashboard_ecomerce/models/category.dart';
 import 'package:dashboard_ecomerce/services/manager_http_response.dart';
-import 'package:dashboard_ecomerce/views/side_bar_screen/category_screen.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 class CategoryController {
-  uploadCategory({required dynamic pickedImage, required dynamic pickedBanner, required String name, required BuildContext context,})async {
+  uploadCategory({required dynamic pickedImage, required dynamic pickedBanner, required String name, required context,})async {
     try {
      final cloudinary = CloudinaryPublic('dqtjhtikp', 'upload1');
      CloudinaryResponse imageResponse = await cloudinary.uploadFile(

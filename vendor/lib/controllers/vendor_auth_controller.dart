@@ -60,7 +60,7 @@ class VendorAuthController {
 
   // Sign in user
   Future<void> signInVendor({
-    required BuildContext context,
+    required context,
     required String email,
     required String password,
   }) async {

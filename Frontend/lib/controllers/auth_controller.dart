@@ -12,7 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 final providerContainer = ProviderContainer();
 class AuthController {
   Future<void> signUpUsers({
-    required BuildContext context,
+    required context,
     required String email,
     required String fullName,
     required String password,
@@ -43,7 +43,7 @@ class AuthController {
 
   // Sign in user
   Future<void> signInUser({
-    required BuildContext context,
+    required context,
     required String email,
     required String password,
   }) async {
@@ -94,7 +94,7 @@ class AuthController {
   }
   //Sign out 
   Future<void> signOutUser({
-    required BuildContext context
+    required context
   }) async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -114,6 +114,53 @@ class AuthController {
     }
     catch (e) {
      showSnackBar(context, 'Lỗi khi đăng xuất');
+    }
+  }
+  //Update user state city and locality
+    Future<void> updateUserLocation({
+      required context,
+      required String id,
+      required String state,
+      required String city,
+      required String locality
+    }) async {
+      try {
+        //make an HTTP PUT request to update user state, city and locality
+        final http.Response response = await http.put(Uri.parse('$uri/api/users/$id'),
+          //set the header for the request to specify that the content is Json
+            headers: <String, String>{
+              // Set the content type to application/json
+              'Content-Type': 'application/json; charset=UTF-8', // specify the content type as Json
+          },
+        //Encode the update data(state, city, and locality) AS json object
+          body: jsonEncode({
+            'state': state,
+            'city': city,
+            'locality': locality,
+          }),
+        );
+        manageHttpResponse(response: response, context: context, onSuccess: () async{
+          //Decode the updated user data from the response body
+          //This converts the json String response into Dart Map
+          final updateUser = jsonDecode(response.body);
+          //Access Shared preference for local data storage
+          //Shared preferences allow us to store data persisitently on the device
+          SharedPreferences preferences = await SharedPreferences.getInstance();
+          //Encode the update user data as json String 
+          // This prepares the data for storage in shared preference
+          final userJson = jsonEncode(updateUser);
+          //update the application state with the updated user data user in Riverpod
+          //this ensures the app reflects the most recent user data
+          providerContainer.read(userProvider.notifier).setUser(userJson);
+          //store the updated user data in shared preference for future user
+          //this allows the app to retrive the user data even after the app restarts
+          await  preferences.setString('user', userJson);
+        });
+      }
+      catch(e){
+        //catch any error that occure during the process
+        //show an error message to the user if the update fails
+        showSnackBar(context, 'Lỗi cập nhật vị trí');
     }
   }
 }

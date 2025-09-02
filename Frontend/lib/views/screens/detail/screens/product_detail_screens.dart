@@ -18,7 +18,9 @@ class ProductDetailScreens extends ConsumerStatefulWidget {
 class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
   @override
   Widget build(BuildContext context) { 
-    final _cartProvider = ref.read(cartProvider.notifier);
+    final cartProviderData = ref.read(cartProvider.notifier);
+    final cartData = ref.watch(cartProvider);
+    final isInCart = cartData.containsKey(widget.product.id);
     return Scaffold(
       appBar: AppBar(
         title: Text('Chi tiết sản phẩm',
@@ -151,8 +153,8 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
       bottomSheet: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: (){
-            _cartProvider.addProductToCart(productName: widget.product.productName, productPrice: widget.product.productPrice, category: widget.product.category, image: widget.product.images, vendorId: widget.product.vendorId, productQuantity: widget.product.quantity, quantity: 1, productId: widget.product.id, description: widget.product.description, fullName: widget.product.fullName);
+          onTap: isInCart? null : (){
+            cartProviderData.addProductToCart(productName: widget.product.productName, productPrice: widget.product.productPrice, category: widget.product.category, image: widget.product.images, vendorId: widget.product.vendorId, productQuantity: widget.product.quantity, quantity: 1, productId: widget.product.id, description: widget.product.description, fullName: widget.product.fullName);
             showSnackBar(context, widget.product.productName);
           },
           child: Container(
@@ -160,7 +162,7 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
             width: 386,
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
-              color: const Color(0xFF3B54EE),
+              color: isInCart ? Colors.grey : const Color(0xFF3B54EE),
               borderRadius: BorderRadius.circular(15),
             ),
             child: Center(

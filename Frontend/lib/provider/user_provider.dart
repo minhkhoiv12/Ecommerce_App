@@ -15,8 +15,26 @@ class UserProvider extends StateNotifier<User?> {
   void signOut() {
     state = null; // Đặt lại state người dùng về null khi đăng xuất
   }
+  //Method to Recreate the user state
+  void recreateUserState({
+    required String state,
+    required String city,
+    required String locality
+  }){
+    if(this.state !=null){
+      this.state = User(
+        id: this.state!.id, //Preserver the existing user id
+        fullName: this.state!.fullName, //preserver the existing fullName
+        email: this.state!.email, 
+        state: state, 
+        city: city, 
+        locality: locality, 
+        password: this.state!.password, //preserver the existing password
+        token: this.state!.token //preserver the existing token
+      );
+    }
+  }
   
-
 }
 // make the data accisible within the application
 //Tạo một Provider toàn cục để quản lý và truy cập UserProvider trong toàn app

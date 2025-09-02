@@ -17,7 +17,7 @@ class ProductController {
     required String fullName,
     required String subCategory,
     required List<File>? pickedImages,
-    required BuildContext context,
+    required context,
   }) async {
     if(pickedImages !=null) {
       final cloudinary = CloudinaryPublic('dqtjhtikp', 'upload1');

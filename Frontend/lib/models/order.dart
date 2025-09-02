@@ -19,7 +19,7 @@ class Order {
   final bool delivered;
 
   Order({required this.id, required this.fullName, required this.email, required this.state, required this.city, required this.locality, required this.productName, required this.productPrice, required this.quantity, required this.category, required this.image, required this.buyerId, required this.vendorId, required this.processing, required this.delivered});
-  
+  String toJson() => json.encode(toMap());
 
   
   
@@ -46,9 +46,9 @@ class Order {
     };
   }
 
-  factory Order.fromMap(Map<String, dynamic> map) {
+  factory Order.fromJson(Map<String, dynamic> map) {
     return Order(
-      id: map['id'] as String,
+      id: map['_id'] as String,
       fullName: map['fullName'] as String,
       email: map['email'] as String,
       state: map['state'] as String,
@@ -66,7 +66,8 @@ class Order {
     );
   }
 
-  String toJson() => json.encode(toMap());
+ 
 
-  factory Order.fromJson(String source) => Order.fromMap(json.decode(source) as Map<String, dynamic>);
+  //factory Order.fromJson(String source) => Order.fromMap(json.decode(source) as Map<String, dynamic>);
+
 }
