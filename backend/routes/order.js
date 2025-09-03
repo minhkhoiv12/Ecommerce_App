@@ -86,4 +86,58 @@ orderRouter.delete("/api/orders/:id", async (req, res)=> {
         res.status(500).json({error: e.message});
     }   
 });
+
+//GET route for fetching orders by vendor ID
+orderRouter.get('/api/orders/vendors/:vendorId', async(req, res)=>{
+    try {
+        //Extract vendorId from the request parameters
+        const {vendorId} = req.params;
+        //Find all orders in the database that match the vendorid
+        const orders = await Order.find({vendorId});
+        //if no orders are found, return a 404 status with a message
+        if(orders.length === 0){
+            return res.status(404).json({msg: "không tìm thấy đơn hàng nào cho người bán này"});
+        }
+        //if orders are found, return them with a 200 status code
+        return res.status(200).json(orders);
+    }
+    catch(e){
+        //Handle any errors that occure during the order retrieval process
+        res.status(500).json({error: e.message});
+    }
+});
+orderRouter.patch('/api/orders/:id/delivered', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const updatedOrder = await Order.findByIdAndUpdate(id, {delivered: true}, {new: true});
+        if(!updatedOrder) {
+            return res.status(404).json({msg: "không tìm thấy đơn hàng với id đã cho"});
+        }
+        else {
+            return res.status(200).json(updatedOrder);
+        }
+    }
+    catch (e) {
+        res.status(500).json({error: e.message});
+
+    }
+
+});
+orderRouter.patch('/api/orders/:id/processing', async (req, res) => {
+    try {
+        const {id} = req.params;
+        const updatedOrder = await Order.findByIdAndUpdate(id, {processing: false}, {new: true});
+        if(!updatedOrder) {
+            return res.status(404).json({msg: "không tìm thấy đơn hàng với id đã cho"});
+        }
+        else {
+            return res.status(200).json(updatedOrder);
+        }
+    }
+    catch (e) {
+        res.status(500).json({error: e.message});
+
+    }
+
+});
 module.exports = orderRouter;
