@@ -45,7 +45,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Text("Login account",
+              Text("Đăng nhập tài khoản",
                 style:GoogleFonts.getFont(
                   'Lato',
                   color: Color(0xFF0d120E),
@@ -54,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 23,
                   )
                 ),
-                Text("To Explore the world of Flutter",
+                Text("Đăng nhập để bắt đầu mua sắm",
                   style: GoogleFonts.getFont(
                     'Lato',
                     color: Color(0xFF0d120E),
@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Vui lòng nhập email của bạn';
                     }
                     // Add more validation logic if needed
                     return null;
@@ -99,7 +99,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your email',
+                    labelText: 'Nhập email của bạn',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
@@ -124,7 +124,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Vui lòng nhập mật khẩu của bạn';
                     }
                     // Add more validation logic if needed
                     return null;
@@ -137,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your password',
+                    labelText: 'Nhập mật khẩu của bạn',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
@@ -248,7 +248,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                           ),
                         ),
-                        Center(child: isLoading? const CircularProgressIndicator(color: Colors.white,): Text("Sign In",
+                        Center(child: isLoading? const CircularProgressIndicator(color: Colors.white,): Text("Đăng nhập",
                             style: GoogleFonts.getFont(
                               'Lato',
                               color: Colors.white,
@@ -270,7 +270,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Need an account?',
+                    Text('Bạn chưa có tài khoản?',
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.1,
@@ -282,7 +282,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           return RegisterScreen();
                         }));
                       },
-                      child: Text('Sign Up',
+                      child: Text('Đăng ký',
                         style: GoogleFonts.roboto(
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.1,

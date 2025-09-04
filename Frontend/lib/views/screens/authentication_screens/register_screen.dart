@@ -3,7 +3,7 @@ import 'package:bai1/views/screens/authentication_screens/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 class RegisterScreen extends StatefulWidget {
-  // const RegisterScreen({super.key});
+  //const RegisterScreen({super.key});
   @override
    State<RegisterScreen> createState() => _RegisterScreenState();
 }
@@ -46,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-              Text("Create your account",
+              Text("Tạo tài khoản",
                 style:GoogleFonts.getFont(
                   'Lato',
                   color: Color(0xFF0d120E),
@@ -55,7 +55,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   fontSize: 23,
                   )
                 ),
-                Text("To Explore the world of Flutter",
+                Text("Tạo tài khoản để tiếp tục mua sắm",
                   style: GoogleFonts.getFont(
                     'Lato',
                     color: Color(0xFF0d120E),
@@ -87,11 +87,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your email';
+                      return 'Vui lòng nhập email của bạn';
                     }
                     // Simple email validation
                     else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                      return 'Please enter a valid email address';
+                      return 'Vui lòng nhập đúng định dạng email';
                     }
                     else
                     {
@@ -106,7 +106,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your email',
+                    labelText: 'Nhập email của bạn',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
@@ -128,7 +128,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                  Align(
                   alignment: Alignment.topLeft,
                   child: Text(
-                    'Full Name',
+                    'Tên đầy đủ',
                     style: GoogleFonts.getFont(
                       'Nunito Sans',
                       color: Color(0xFF0d120E),
@@ -144,7 +144,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   validator: (value) {
                     if (value!.isEmpty) {
-                      return 'Please enter your full name';
+                      return 'Vui lòng nhập đầy đủ họ tên';
                     }
                     else
                     {
@@ -160,7 +160,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your full name',
+                    labelText: 'Nhập tên đầy đủ của bạn',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
@@ -185,11 +185,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   validator: (value){
                     if (value!.isEmpty) {
-                      return 'Please enter your password';
+                      return 'Vui lòng nhập mật khẩu';
                     }
                     else if(value.length < 6)
                     {
-                      return 'Password must be at least 6 characters';
+                      return 'Mật khẩu phải tối thiểu 6 ký tự trở lên';
                     }
                     else
                     {
@@ -204,7 +204,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     focusedBorder: InputBorder.none,
                     enabledBorder: InputBorder.none,
-                    labelText: 'Enter your password',
+                    labelText: 'Nhập mật khẩu của bạn',
                     labelStyle: GoogleFonts.getFont(
                       'Nunito Sans',
                       fontSize: 14,
@@ -316,7 +316,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                           ),
                         ),
-                        Center(child: isLoading?const CircularProgressIndicator(color: Colors.white,): Text("Sign Up",
+                        Center(child: isLoading?const CircularProgressIndicator(color: Colors.white,): Text("Đăng ký",
                             style: GoogleFonts.getFont(
                               'Lato',
                               color: Colors.white,
@@ -335,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text('Already have an account?',
+                    Text('Bạn đã có tài khoản?',
                       style: GoogleFonts.roboto(
                         fontWeight: FontWeight.w500,
                         letterSpacing: 0.1,
@@ -347,7 +347,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           return LoginScreen();
                         }));
                       },
-                      child: Text('Sign In',
+                      child: Text('Đăng nhập',
                         style: GoogleFonts.roboto(
                             fontWeight: FontWeight.w500,
                             letterSpacing: 0.1,

@@ -69,6 +69,7 @@ class OrderController {
         },
         body: jsonEncode({
           "delivered": true,
+          "processing": false,
         }),
       );
       manageHttpResponse(response: response, context: context, onSuccess: (){
@@ -91,6 +92,7 @@ class OrderController {
         },
         body: jsonEncode({
           "processing": false,
+          "delivered": false,
         }),
       );
       manageHttpResponse(response: response, context: context, onSuccess: (){

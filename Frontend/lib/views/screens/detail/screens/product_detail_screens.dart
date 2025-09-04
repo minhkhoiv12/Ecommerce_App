@@ -9,7 +9,7 @@ class ProductDetailScreens extends ConsumerStatefulWidget {
   //const ProductDetailScreens({super.key});
   final Product product;
 
-  const ProductDetailScreens({super.key, required this.product}); 
+  const ProductDetailScreens({super.key, required this.product});
   @override
   // ignore: library_private_types_in_public_api
   _ProductDetailScreensState createState() => _ProductDetailScreensState();
@@ -17,22 +17,22 @@ class ProductDetailScreens extends ConsumerStatefulWidget {
 
 class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
   @override
-  Widget build(BuildContext context) { 
+  Widget build(BuildContext context) {
     final cartProviderData = ref.read(cartProvider.notifier);
     final cartData = ref.watch(cartProvider);
     final isInCart = cartData.containsKey(widget.product.id);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Chi tiết sản phẩm',
-          style:  GoogleFonts.quicksand(
+        title: Text(
+          'Chi tiết sản phẩm',
+          style: GoogleFonts.quicksand(
             fontSize: 18,
             fontWeight: FontWeight.w600,
           ),
         ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: (){}, icon:const Icon(Icons.favorite_border),
-          ),
+          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
         ],
       ),
       body: Column(
@@ -43,9 +43,7 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
               width: 260,
               height: 275,
               clipBehavior: Clip.hardEdge,
-              decoration: const BoxDecoration(
-                
-              ),
+              decoration: const BoxDecoration(),
               child: Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -60,7 +58,7 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
                         color: const Color(0xFFD8DDFF),
                         borderRadius: BorderRadius.circular(130),
                       ),
-                    ), 
+                    ),
                   ),
                   Positioned(
                     left: 22,
@@ -78,14 +76,16 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
                         child: PageView.builder(
                           itemCount: widget.product.images.length,
                           scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index){
-                            return Image.network(widget.product.images[index],
+                          itemBuilder: (context, index) {
+                            return Image.network(
+                              widget.product.images[index],
                               width: 198,
                               height: 22,
                               fit: BoxFit.cover,
                             );
-                          }),
-                      )
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -97,19 +97,21 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(widget.product.productName,
+                Text(
+                  widget.product.productName,
                   style: GoogleFonts.roboto(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
                     letterSpacing: 1,
-                    color:const Color(0xFF3C55Ef),
+                    color: const Color(0xFF3C55Ef),
                   ),
                 ),
-                Text("\$${widget.product.productPrice}",
+                Text(
+                  "\$${widget.product.productPrice}",
                   style: GoogleFonts.roboto(
                     fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color:const Color(0xFF3C55Ef),
+                    color: const Color(0xFF3C55Ef),
                   ),
                 ),
               ],
@@ -117,7 +119,8 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Text(widget.product.category,
+            child: Text(
+              widget.product.category,
               style: GoogleFonts.roboto(
                 color: Colors.grey,
                 fontSize: 16,
@@ -125,38 +128,65 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
               ),
             ),
           ),
+          widget.product.totalRatings == 0
+              ? const Text('')
+              : Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.star, color: Colors.amber),
+                      Text(
+                        widget.product.averageRating.toString(),
+                        style: GoogleFonts.montserrat(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Text("(${widget.product.totalRatings})"),
+                    ],
+                  ),
+                ),
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("Mô tả",
+                Text(
+                  "Mô tả",
                   style: GoogleFonts.lato(
                     fontSize: 17,
                     letterSpacing: 1.7,
-                    color:const Color(0xFF363330),
+                    color: const Color(0xFF363330),
                   ),
                 ),
-                Text(widget.product.description,
-                  style: GoogleFonts.lato(
-                    letterSpacing: 1.7,
-                    fontSize: 15,
-                  ),
-                ), 
+                Text(
+                  widget.product.description,
+                  style: GoogleFonts.lato(letterSpacing: 1.7, fontSize: 15),
+                ),
               ],
-              
             ),
-    
-          )
+          ),
         ],
       ),
       bottomSheet: Padding(
         padding: const EdgeInsets.all(8.0),
         child: InkWell(
-          onTap: isInCart? null : (){
-            cartProviderData.addProductToCart(productName: widget.product.productName, productPrice: widget.product.productPrice, category: widget.product.category, image: widget.product.images, vendorId: widget.product.vendorId, productQuantity: widget.product.quantity, quantity: 1, productId: widget.product.id, description: widget.product.description, fullName: widget.product.fullName);
-            showSnackBar(context, widget.product.productName);
-          },
+          onTap: isInCart
+              ? null
+              : () {
+                  cartProviderData.addProductToCart(
+                    productName: widget.product.productName,
+                    productPrice: widget.product.productPrice,
+                    category: widget.product.category,
+                    image: widget.product.images,
+                    vendorId: widget.product.vendorId,
+                    productQuantity: widget.product.quantity,
+                    quantity: 1,
+                    productId: widget.product.id,
+                    description: widget.product.description,
+                    fullName: widget.product.fullName,
+                  );
+                  showSnackBar(context, widget.product.productName);
+                },
           child: Container(
             height: 46,
             width: 386,
@@ -166,12 +196,14 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
               borderRadius: BorderRadius.circular(15),
             ),
             child: Center(
-              child: Text("Thêm vào giỏ hàng",
-              style: GoogleFonts.mochiyPopOne(
-                fontSize: 16,
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-              ),),
+              child: Text(
+                "Thêm vào giỏ hàng",
+                style: GoogleFonts.mochiyPopOne(
+                  fontSize: 16,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ),

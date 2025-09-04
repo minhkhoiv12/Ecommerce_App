@@ -109,7 +109,7 @@ orderRouter.get('/api/orders/vendors/:vendorId', async(req, res)=>{
 orderRouter.patch('/api/orders/:id/delivered', async (req, res) => {
     try {
         const {id} = req.params;
-        const updatedOrder = await Order.findByIdAndUpdate(id, {delivered: true}, {new: true});
+        const updatedOrder = await Order.findByIdAndUpdate(id, {delivered: true, processing: false}, {new: true});
         if(!updatedOrder) {
             return res.status(404).json({msg: "không tìm thấy đơn hàng với id đã cho"});
         }
@@ -126,7 +126,7 @@ orderRouter.patch('/api/orders/:id/delivered', async (req, res) => {
 orderRouter.patch('/api/orders/:id/processing', async (req, res) => {
     try {
         const {id} = req.params;
-        const updatedOrder = await Order.findByIdAndUpdate(id, {processing: false}, {new: true});
+        const updatedOrder = await Order.findByIdAndUpdate(id, {processing: false, delivered: false}, {new: true});
         if(!updatedOrder) {
             return res.status(404).json({msg: "không tìm thấy đơn hàng với id đã cho"});
         }
