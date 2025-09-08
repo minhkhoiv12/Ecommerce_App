@@ -66,13 +66,13 @@ class _MainScreenState extends State<MainScreen> {
       body: _selectedScreen,
       sideBar: SideBar(
         items: const [
-          AdminMenuItem(title: 'Vendors', route: VendorScreen.id, icon: CupertinoIcons.person_3,),
-          AdminMenuItem(title: 'Buyer', route: BuyerScreen.id , icon: CupertinoIcons.person,),
-          AdminMenuItem(title: 'Orders', route: OrderScreen.id, icon: CupertinoIcons.shopping_cart,),
-          AdminMenuItem(title: 'Categories', route: CategoryScreen.id, icon: Icons.category,),
-          AdminMenuItem(title: 'Subcategories', route: SubcategoryScreen.id, icon: Icons.subdirectory_arrow_right,),
-          AdminMenuItem(title: 'Upload Banner', route: UploadBanner.id, icon: Icons.upload,),
-           AdminMenuItem(title: 'Products', route: ProductScreen.id, icon: Icons.store,),
+          AdminMenuItem(title: 'Quản lý người bán', route: VendorScreen.id, icon: CupertinoIcons.person_3,),
+          AdminMenuItem(title: 'Quản lý người mua', route: BuyerScreen.id , icon: CupertinoIcons.person,),
+          AdminMenuItem(title: 'Quản lý đơn hàng', route: OrderScreen.id, icon: CupertinoIcons.shopping_cart,),
+          AdminMenuItem(title: 'Quản lý danh mục', route: CategoryScreen.id, icon: Icons.category,),
+          AdminMenuItem(title: 'Quản lý danh mục con', route: SubcategoryScreen.id, icon: Icons.subdirectory_arrow_right,),
+          AdminMenuItem(title: 'Quản lý Banner', route: UploadBanner.id, icon: Icons.upload,),
+           AdminMenuItem(title: 'Quản lý sản phẩm', route: ProductScreen.id, icon: Icons.store,),
         ],
         selectedRoute: VendorScreen.id,
         onSelected: (item) {

@@ -20,18 +20,16 @@ class _CartScreenState extends ConsumerState<CartScreen> {
     final cartData = ref.watch(cartProvider);
     final _cartProvider = ref.read(cartProvider.notifier);
     final totalAmount = ref.read(cartProvider.notifier).calculateTotalAmount();
-   return Scaffold(
-     appBar: PreferredSize(
-        preferredSize: Size.fromHeight(130), 
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(130),
         child: Container(
           width: MediaQuery.of(context).size.width,
           height: 118,
           clipBehavior: Clip.hardEdge,
           decoration: BoxDecoration(
             image: DecorationImage(
-              image:  AssetImage(
-                'assets/icons/cartb.png'
-              ),
+              image: AssetImage('assets/icons/cartb.png'),
               fit: BoxFit.cover,
             ),
           ),
@@ -42,11 +40,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 top: 52,
                 child: Stack(
                   children: [
-                    Image.asset(
-                      'assets/icons/not.png',
-                      width: 25,
-                      height: 25,
-                    ),
+                    Image.asset('assets/icons/not.png', width: 25, height: 25),
                     Positioned(
                       top: 0,
                       right: 0,
@@ -55,7 +49,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                         height: 20,
                         padding: const EdgeInsets.all(4),
                         decoration: BoxDecoration(
-                          color:  Colors.yellow.shade400,
+                          color: Colors.yellow.shade400,
                           borderRadius: BorderRadius.circular(12),
                         ),
                         child: Center(
@@ -67,7 +61,7 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                               fontSize: 11,
                             ),
                           ),
-                        )
+                        ),
                       ),
                     ),
                   ],
@@ -77,196 +71,208 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 left: 61,
                 top: 51,
                 child: Text(
-                   'Giỏ hàng',
-                   style: GoogleFonts.lato(
+                  'Giỏ hàng',
+                  style: GoogleFonts.lato(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
                     color: Colors.white,
-                   ),
                   ),
-                )
+                ),
+              ),
             ],
-          )
-        )
-      ),
-      body: cartData.isEmpty?Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              textAlign: TextAlign.center,
-              'Giỏ hàng của bạn đang trống',
-                style: GoogleFonts.roboto(
-                  fontSize: 15,
-                  letterSpacing: 1.7,
-                ),
-               ),
-               TextButton(
-                onPressed: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (context){
-                    return MainScreen();
-                  }));
-                }, 
-                child: const Text('Shop'),
-                ),
-          ],
+          ),
         ),
-      ):SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Container(
-              width: MediaQuery.of(context).size.width,
-              height: 49,
-              clipBehavior: Clip.hardEdge,
-              decoration: const BoxDecoration(),
-              child: Stack(
-                clipBehavior: Clip.none,
+      ),
+      body: cartData.isEmpty
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Positioned(
-                    left: 0,
-                    top: 0,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      height: 49,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFD7DDFF),
-                      ),
-                    )
+                  Text(
+                    textAlign: TextAlign.center,
+                    'Giỏ hàng của bạn đang trống',
+                    style: GoogleFonts.roboto(fontSize: 15, letterSpacing: 1.7),
                   ),
-                  Positioned(
-                    left: 44,
-                    top: 19,
-                    child: Container(
-                      width: 10,
-                      height: 10,
-                      clipBehavior: Clip.hardEdge,
-                      decoration: BoxDecoration(
-                        color: Colors.black,
-                        borderRadius: BorderRadius.circular(5),
-    
-                      ),
-                    ),
+                  TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return MainScreen();
+                          },
+                        ),
+                      );
+                    },
+                    child: const Text('Shop'),
                   ),
-                  Positioned(
-                    left: 69,
-                    top: 14,
-                    child: Text('Bạn có ${cartData.length} sản phẩm',
-                      style: GoogleFonts.lato(
-                        color: Colors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.7,
-                      ),
-                    ),
-                  )
                 ],
               ),
-            ),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: cartData.length,
-              itemBuilder: (context, index){
-                final cartItem = cartData.values.toList()[index];
-                return Card(
-                  child: SizedBox(
-                    height: 200,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
+            )
+          : SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: 49,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: const BoxDecoration(),
+                    child: Stack(
+                      clipBehavior: Clip.none,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: SizedBox(
-                            height: 100,
-                            width: 100,
-                            child: Image.network(
-                              cartItem.image[0],
-                              fit: BoxFit.cover,
+                        Positioned(
+                          left: 0,
+                          top: 0,
+                          child: Container(
+                            width: MediaQuery.of(context).size.width,
+                            height: 49,
+                            clipBehavior: Clip.hardEdge,
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFD7DDFF),
                             ),
                           ),
                         ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              cartItem.productName,
-                                style: GoogleFonts.lato(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                              ),
+                        Positioned(
+                          left: 44,
+                          top: 19,
+                          child: Container(
+                            width: 10,
+                            height: 10,
+                            clipBehavior: Clip.hardEdge,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              borderRadius: BorderRadius.circular(5),
                             ),
-                            Text(cartItem.category,
-                              style: GoogleFonts.roboto(
-                                color: Colors.grey,
-                                fontSize: 14
-                              ),
+                          ),
+                        ),
+                        Positioned(
+                          left: 69,
+                          top: 14,
+                          child: Text(
+                            'Bạn có ${cartData.length} sản phẩm',
+                            style: GoogleFonts.lato(
+                              color: Colors.black,
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.7,
                             ),
-                            Text("\$${cartItem.productPrice.toStringAsFixed(2)}",
-                              style: GoogleFonts.lato(
-                                color: Colors.pink,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                  height: 40,
-                                  width: 120,
-                                  decoration: const BoxDecoration(
-                                    color: Color(0xFF102DE1),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: cartData.length,
+                    itemBuilder: (context, index) {
+                      final cartItem = cartData.values.toList()[index];
+                      return Card(
+                        child: SizedBox(
+                          height: 200,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: SizedBox(
+                                  height: 100,
+                                  width: 100,
+                                  child: Image.network(
+                                    cartItem.image[0],
+                                    fit: BoxFit.cover,
                                   ),
-                                  child: Row(
+                                ),
+                              ),
+                              Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    cartItem.productName,
+                                    style: GoogleFonts.lato(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Text(
+                                    cartItem.category,
+                                    style: GoogleFonts.roboto(
+                                      color: Colors.grey,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                  Text(
+                                    "\$${cartItem.productPrice.toStringAsFixed(2)}",
+                                    style: GoogleFonts.lato(
+                                      color: Colors.pink,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Row(
                                     children: [
-                                      IconButton(
-                                        onPressed: (){
-                                          _cartProvider.decrementCartItem(cartItem.productId);
-                                        }, 
-                                        icon: const Icon(
-                                          CupertinoIcons.minus,
-                                          color: Colors.white,
+                                      Container(
+                                        height: 40,
+                                        width: 120,
+                                        decoration: const BoxDecoration(
+                                          color: Color(0xFF102DE1),
                                         ),
-                                      ),
-                                      Text(
-                                        cartItem.quantity.toString(),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                      IconButton(
-                                        onPressed: (){
-                                           _cartProvider.IncrementCartItem(cartItem.productId);
-                                        }, 
-                                        icon: const Icon(
-                                          CupertinoIcons.plus,
-                                          color: Colors.white,
+                                        child: Row(
+                                          children: [
+                                            IconButton(
+                                              onPressed: () {
+                                                _cartProvider.decrementCartItem(
+                                                  cartItem.productId,
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                CupertinoIcons.minus,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            Text(
+                                              cartItem.quantity.toString(),
+                                              style: const TextStyle(
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            IconButton(
+                                              onPressed: () {
+                                                _cartProvider.incrementCartItem(
+                                                  cartItem.productId,
+                                                );
+                                              },
+                                              icon: const Icon(
+                                                CupertinoIcons.plus,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ),
                                     ],
                                   ),
-                                )
-                              ],
-                            ),
-                            IconButton(
-                              onPressed: (){
-                                _cartProvider.removeCartItem(cartItem.productId);
-                              }, 
-                              icon: const Icon(CupertinoIcons.delete,
-
+                                  IconButton(
+                                    onPressed: () {
+                                      _cartProvider.removeCartItem(
+                                        cartItem.productId,
+                                      );
+                                    },
+                                    icon: const Icon(CupertinoIcons.delete),
+                                  ),
+                                ],
                               ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   ),
-                );
-              }),
-          ],
-        )
-      ),
+                ],
+              ),
+            ),
       bottomNavigationBar: Container(
         width: 416,
         height: 89,
@@ -283,15 +289,14 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 clipBehavior: Clip.hardEdge,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  border: Border.all(
-                    color: Color(0xFFC4C4C4),
-                  ),
+                  border: Border.all(color: Color(0xFFC4C4C4)),
                 ),
               ),
             ),
             Align(
               alignment: const Alignment(-0.63, -0.26),
-              child: Text('Tổng phụ',
+              child: Text(
+                'Tổng phụ',
                 style: GoogleFonts.roboto(
                   color: Color(0xFFA1A1A1),
                   fontSize: 16,
@@ -306,27 +311,31 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                 style: GoogleFonts.roboto(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: const Color(0xFFFF6464,)
+                  color: const Color(0xFFFF6464),
                 ),
               ),
             ),
             Align(
               alignment: Alignment(0.83, -1),
               child: InkWell(
-                onTap: totalAmount ==0.0? null : (){
-                  Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const CheckoutScreen(),
-      ),
-    );
-                },
+                onTap: totalAmount == 0.0
+                    ? null
+                    : () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CheckoutScreen(),
+                          ),
+                        );
+                      },
                 child: Container(
                   width: 166,
                   height: 71,
                   clipBehavior: Clip.hardEdge,
                   decoration: BoxDecoration(
-                    color: totalAmount==0.0?Colors.grey: const Color(0xFF1532E7),
+                    color: totalAmount == 0.0
+                        ? Colors.grey
+                        : const Color(0xFF1532E7),
                   ),
                   child: Center(
                     child: Padding(
@@ -334,27 +343,25 @@ class _CartScreenState extends ConsumerState<CartScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text('Thanh toán',
+                          Text(
+                            'Thanh toán',
                             style: GoogleFonts.roboto(
-                              
                               color: Colors.white,
                               fontSize: 16,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Icon(Icons.arrow_forward_ios,
-                          color: Colors.white,
-                          )
+                          Icon(Icons.arrow_forward_ios, color: Colors.white),
                         ],
                       ),
-                    )
-                  )
+                    ),
+                  ),
                 ),
               ),
-            )
+            ),
           ],
-        )
-      ) ,
-   );
+        ),
+      ),
+    );
   }
 }

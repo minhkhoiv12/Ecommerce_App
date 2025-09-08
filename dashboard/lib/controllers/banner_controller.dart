@@ -5,7 +5,6 @@ import 'package:cloudinary_public/cloudinary_public.dart';
 import 'package:dashboard_ecomerce/global_variables.dart';
 import 'package:dashboard_ecomerce/models/banner.dart';
 import 'package:dashboard_ecomerce/services/manager_http_response.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 class BannerController {
   uploadCategory({required dynamic pickedImage, required context,})async {

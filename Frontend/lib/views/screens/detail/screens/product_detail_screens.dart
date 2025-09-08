@@ -1,5 +1,6 @@
 import 'package:bai1/models/product.dart';
 import 'package:bai1/provider/cart_provider.dart';
+import 'package:bai1/provider/favorite_provider.dart';
 import 'package:bai1/services/manager_http_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -19,6 +20,8 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
   @override
   Widget build(BuildContext context) {
     final cartProviderData = ref.read(cartProvider.notifier);
+    final favoriteProviderData = ref.read(favoriteProvider.notifier);
+    ref.watch(favoriteProvider);
     final cartData = ref.watch(cartProvider);
     final isInCart = cartData.containsKey(widget.product.id);
     return Scaffold(
@@ -32,7 +35,29 @@ class _ProductDetailScreensState extends ConsumerState<ProductDetailScreens> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
+          IconButton(
+            onPressed: () {
+              favoriteProviderData.addProductToFavorite(
+                productName: widget.product.productName,
+                productPrice: widget.product.productPrice,
+                category: widget.product.category,
+                image: widget.product.images,
+                vendorId: widget.product.vendorId,
+                productQuantity: widget.product.quantity,
+                quantity: 1,
+                productId: widget.product.id,
+                description: widget.product.description,
+                fullName: widget.product.fullName,
+              );
+              showSnackBar(context, 'Đã thêm ${widget.product.productName}');
+            },
+            icon:
+                favoriteProviderData.getFavoriteItems.containsKey(
+                  widget.product.id,
+                )
+                ? Icon(Icons.favorite, color: Colors.red)
+                : const Icon(Icons.favorite_border),
+          ),
         ],
       ),
       body: Column(

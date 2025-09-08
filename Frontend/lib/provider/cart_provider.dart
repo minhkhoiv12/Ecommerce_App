@@ -1,7 +1,10 @@
 //A notifier class to manage the car state, extending stateNotifier
 //with an inital state of an empty map
+import 'dart:convert';
+
 import 'package:bai1/models/cart.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 //Define a StateNotifierProvider to expose an instance of the CartNofier
 //Making it accessible within our app
 final cartProvider = StateNotifierProvider<CartNotifier,Map<String, Cart>>(
@@ -12,8 +15,36 @@ final cartProvider = StateNotifierProvider<CartNotifier,Map<String, Cart>>(
 //A notifier class to manage the cart state, extending stateNotifier
 //with an inital state an empty map
 class CartNotifier extends StateNotifier<Map<String,Cart>>{
-  CartNotifier() : super({});
+  CartNotifier() : super({}){
+    _loadCartItems();
+  }
 
+
+  //A private method that loads items from sharedpreferences
+  Future<void> _loadCartItems() async {
+    //retrieving the sharepreferences instance to store data
+    final prefs = await SharedPreferences.getInstance();
+    //fetch the json string of the favorite items from sharedpreferences under the key favorites
+    final cartString = prefs.getString('cart_items');
+    //checking if the string is not null,meaning there is saved data to load
+    if(cartString!=null){
+      //decode the json String into map of dynamic data
+      final Map<String, dynamic> cartMap = jsonDecode(cartString);
+      //convert the dynamic map into a map of Favorite Object using the "fromjson" factory method
+      final cartItems = cartMap.map((key,value)=>MapEntry(key, Cart.fromJson(value)));
+      //updating the state with the loaded favorites
+      state = cartItems;
+    }
+  }
+  //A private method that saves the current list of favorite items to shared preferences
+  Future<void> _saveCartItems() async{
+    //retrieving the sharepreferences instance to store data
+    final prefs = await SharedPreferences.getInstance();
+    //encoding the current state (Map of favorite object ) into json String 
+    final cartString = jsonEncode(state);
+    //saving the json string to sharepreferences with the key "favorites"
+    await prefs.setString('cart_items', cartString);
+  }
   //Method to add product to the cart
   void addProductToCart({
   required String productName,
@@ -43,6 +74,7 @@ class CartNotifier extends StateNotifier<Map<String,Cart>>{
         description: state[productId]!.description, 
         fullName: state[productId]!.fullName),
       };
+      _saveCartItems();
 
     }
     else{
@@ -51,14 +83,16 @@ class CartNotifier extends StateNotifier<Map<String,Cart>>{
         ...state,
         productId: Cart(productName: productName, productPrice: productPrice, category: category, image: image, vendorId: vendorId, productQuantity: productQuantity, quantity: quantity, productId: productId, description: description, fullName: fullName)
       };
+      _saveCartItems();
     }
   }
   //Method to increment the quantity of a product in the cart
-  void IncrementCartItem(String productId){
+  void incrementCartItem(String productId){
     if(state.containsKey(productId)){
       state[productId]!.quantity++;
       //Notify listeners that the state has changed
       state = {...state};
+      _saveCartItems();
 
     }
   }
@@ -68,6 +102,7 @@ class CartNotifier extends StateNotifier<Map<String,Cart>>{
       state[productId]!.quantity--;
       //Notify listerners that the state has changed
       state = {...state};
+      _saveCartItems();
     }
   }
   //Method to remove item from the cart
@@ -75,6 +110,7 @@ class CartNotifier extends StateNotifier<Map<String,Cart>>{
     state.remove(productId);
     //Notify Listerners that the state has changed 
     state = {...state};
+    _saveCartItems();
     
   }
   //Method to calculate total amount of items we have in cart
