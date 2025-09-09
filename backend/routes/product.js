@@ -1,8 +1,8 @@
 const express = require("express");
 const Product = require('../models/product');
 const productRouter = express.Router();
-
-productRouter.post('/api/add-product', async(req, res) => {
+const {auth, vendorAuth} = require('../middleware/auth')
+productRouter.post('/api/add-product',auth, vendorAuth, async(req, res) => {
     try{
         const {productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images} = req.body;
         let product = new Product({productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images});
@@ -14,7 +14,7 @@ productRouter.post('/api/add-product', async(req, res) => {
 
     }
 });
-productRouter.get('/api/popular-products', async(req, res) => {
+productRouter.get('/api/popular-products',async(req, res) => {
     try{
         const product = await Product.find({popular: true});
         if(!product || product.length ==0){
@@ -46,7 +46,7 @@ productRouter.get('/api/recommended-products', async(req, res) => {
     }
 });
 // new route for retrieving products by category
-productRouter.get('/api/products-by-category/:category', async(req, res) => {
+productRouter.get('/api/products-by-category/:category',async(req, res) => {
     try {
         const {category} = req.params;
         const products = await Product.find({category,popular: true});

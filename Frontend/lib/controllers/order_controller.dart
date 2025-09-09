@@ -4,6 +4,7 @@ import 'package:bai1/global_variables.dart';
 import 'package:bai1/models/order.dart';
 import 'package:bai1/services/manager_http_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 class OrderController {
   //function to upload orders
   uploadOrders({
@@ -25,11 +26,14 @@ class OrderController {
     required context,
   }) async{
     try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? token = preferences.getString('auth_token');
       final Order order = Order(id: id, fullName: fullName, email: email, state: state, city: city, locality: locality, productName: productName, productPrice: productPrice, quantity: quantity, category: category, image: image, buyerId: buyerId, vendorId: vendorId, processing: processing, delivered: delivered);
       http.Response response = await http.post(Uri.parse("$uri/api/orders"),
         body: order.toJson(),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
         },
       );
       manageHttpResponse(response: response, context: context, onSuccess: (){
@@ -45,10 +49,13 @@ class OrderController {
     required String buyerId
   }) async {
     try{
+        SharedPreferences preferences = await SharedPreferences.getInstance();
+        String? token = preferences.getString('auth_token');
         //Send an HTTP GET request to get the orders by the buyerID
       http.Response response = await http.get(Uri.parse("$uri/api/orders/$buyerId"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'x-auth-token': token!,
         },
       );
       //Check if the response status code is 200(OK)
@@ -77,10 +84,13 @@ class OrderController {
     required context,
   }) async {
     try {
+      SharedPreferences preferences = await SharedPreferences.getInstance();
+      String? token = preferences.getString('auth_token');
       //send an HTTP Delete request to delete the order by _id
       http.Response response = await http.delete(Uri.parse("$uri/api/orders/$id"),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+           'x-auth-token': token!,
         },
       );
       //handle the HTTP Response

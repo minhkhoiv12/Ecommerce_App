@@ -3,7 +3,6 @@ import 'package:bai1/provider/cart_provider.dart';
 import 'package:bai1/provider/user_provider.dart';
 import 'package:bai1/views/screens/detail/screens/shipping_address_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -393,9 +392,9 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   id: '', 
                   fullName: ref.read(userProvider)!.fullName, 
                   email: ref.read(userProvider)!.email, 
-                  state: 'VietNam', 
-                  city: 'Thành Phố Hồ Chí Minh', 
-                  locality: 'Test', 
+                  state: ref.read(userProvider)!.state, 
+                  city: ref.read(userProvider)!.city, 
+                  locality: ref.read(userProvider)!.locality, 
                   productName: item.productName, 
                   productPrice: item.productPrice, 
                   quantity: item.quantity, 

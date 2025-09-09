@@ -1,9 +1,9 @@
 const express = require('express');
 const orderRouter = express.Router();
 const Order = require('../models/order');
-
+const {auth, vendorAuth} = require('../middleware/auth');
 //Post router for creating orders
-orderRouter.post('/api/orders', async(req, res)=>{
+orderRouter.post('/api/orders',auth,async(req, res)=>{
     try {
 
         const {
@@ -45,7 +45,7 @@ orderRouter.post('/api/orders', async(req, res)=>{
     }
 });
 //GET route for fetching orders by buyer ID
-orderRouter.get('/api/orders/:buyerId', async(req, res)=>{
+orderRouter.get('/api/orders/:buyerId',auth, async(req, res)=>{
     try {
         //Extract buyerId from the request parameters
         const {buyerId} = req.params;
@@ -65,7 +65,7 @@ orderRouter.get('/api/orders/:buyerId', async(req, res)=>{
 });
 
 // Delete route for deleting specific order by _id
-orderRouter.delete("/api/orders/:id", async (req, res)=> {
+orderRouter.delete("/api/orders/:id",auth, async (req, res)=> {
     try {
         //extract the id from the request parameter
         const {id} = req.params;
@@ -88,7 +88,7 @@ orderRouter.delete("/api/orders/:id", async (req, res)=> {
 });
 
 //GET route for fetching orders by vendor ID
-orderRouter.get('/api/orders/vendors/:vendorId', async(req, res)=>{
+orderRouter.get('/api/orders/vendors/:vendorId',auth,vendorAuth, async(req, res)=>{
     try {
         //Extract vendorId from the request parameters
         const {vendorId} = req.params;
@@ -139,5 +139,13 @@ orderRouter.patch('/api/orders/:id/processing', async (req, res) => {
 
     }
 
+});
+orderRouter.get('/api/orders', async(req, res)=>{
+    try {
+        const orders = await Order.find();
+        return res.status(200).json(orders);
+    } catch (e) {
+         res.status(500).json({error: e.message});
+    }
 });
 module.exports = orderRouter;

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BuyerScreen extends StatelessWidget {
-  static const String id = '\buyer-screen';
+  static const String id = '\buyerscreen';
   const BuyerScreen({super.key});
 
   @override

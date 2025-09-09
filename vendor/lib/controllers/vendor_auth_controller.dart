@@ -10,7 +10,6 @@ import 'package:vendor/models/vendor.dart';
 import 'package:http/http.dart' as http;
 import 'package:vendor/provider/vendor_provider.dart';
 import 'package:vendor/services/manage_http_response.dart';
-import 'package:vendor/views/screens/authentication/login_screen.dart';
 import 'package:vendor/views/screens/main_vendor_screen.dart';
 final ProviderContainer providerContainer = ProviderContainer();
 class VendorAuthController {
