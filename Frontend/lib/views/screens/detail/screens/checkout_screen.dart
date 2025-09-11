@@ -1,7 +1,9 @@
 import 'package:bai1/controllers/order_controller.dart';
 import 'package:bai1/provider/cart_provider.dart';
 import 'package:bai1/provider/user_provider.dart';
+import 'package:bai1/services/manager_http_response.dart';
 import 'package:bai1/views/screens/detail/screens/shipping_address_screen.dart';
+import 'package:bai1/views/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -405,6 +407,12 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
                   processing: true, 
                   delivered: false, 
                   context: context);
+                }).then((value){
+                  _cartProvider.clearCart();
+                  showSnackBar(context, 'Đơn hàng đã được đặt thành công');
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return MainScreen();
+                  }));
                 });
               }
             },

@@ -58,4 +58,54 @@ class ProductController {
       throw Exception('Lỗi khi tải sản phẩm theo danh mục: $e');
     }
   }
+  //display related products by subcategory
+  // load product by category function 
+  Future<List<Product>> loadRelatedProductsBySubcategory(String productId) async {
+    try {
+      http.Response response = await http.get(Uri.parse("$uri/api/related-products-by-subcategory/$productId"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if(response.statusCode == 200){
+        //Decode the json response body into a list of dynamic objects
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
+        //map each items in the list to product model object which we can use 
+        List<Product> relatedProducts = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
+        return relatedProducts;
+      }
+      else {
+        //if status code is not 200, throw an exeption  indicating failure to load the popular products
+        throw Exception('Thất bại khi tải sản phẩm liên quan');
+      }
+    }
+    catch (e) {
+      throw Exception('Lỗi khi tải sản phẩm liên quan: $e');
+    }
+  }
+  //method to get the top 10 highest-rated products
+  Future<List<Product>> loadTopRatedProduct() async {
+    try {
+      http.Response response = await http.get(Uri.parse("$uri/api/top-rated-products"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if(response.statusCode == 200){
+        //Decode the json response body into a list of dynamic objects
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
+        //map each items in the list to product model object which we can use 
+        List<Product> topRelatedProducts = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
+        return topRelatedProducts;
+      }
+      else {
+        //if status code is not 200, throw an exeption  indicating failure to load the popular products
+        throw Exception('Thất bại khi tải sản phẩm được đánh giá cao nhất');
+      }
+    }
+    catch (e) {
+      throw Exception('Lỗi khi tải sản phẩm được đánh giá cáo nhất: $e');
+    }
+  }
+
 }

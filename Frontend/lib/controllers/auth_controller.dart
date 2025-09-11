@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:bai1/models/user.dart';
+import 'package:bai1/provider/delivered_order_count_provider.dart';
 import 'package:bai1/provider/user_provider.dart';
 import 'package:bai1/services/manager_http_response.dart';
 import 'package:bai1/views/screens/authentication_screens/login_screen.dart';
@@ -9,10 +10,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:http/http.dart' as http;
 import 'package:bai1/global_variables.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-final providerContainer = ProviderContainer();
 class AuthController {
   Future<void> signUpUsers({
-    required context,
+    required BuildContext context,
     required String email,
     required String fullName,
     required String password,
@@ -36,16 +36,17 @@ class AuthController {
     } 
     catch (e) {
       // Handle any exceptions that occur during the sign-up process
-      print('Error during sign-up: $e');
+      print('Xảy ra lỗi trong quá trình đăng ký: $e');
       // You can show a snackbar or dialog to inform the user about the error
     }
   }
 
   // Sign in user
   Future<void> signInUser({
-    required context,
+    required BuildContext context,
     required String email,
     required String password,
+    required WidgetRef ref,
   }) async {
     try{
       User user = User(id: '', fullName: '', email: email, state: '', city: '', locality: '', password: password, token: '');
@@ -69,7 +70,7 @@ class AuthController {
         //Encode the user data recived from the backend as json
         final userJson = jsonEncode(jsonDecode(response.body)['user']);
         //update the application state with the user data using Riverpod
-        providerContainer.read(userProvider.notifier).setUser(userJson);//Cập nhật trạng thái người dùng trong bộ nhớ (RAM)
+        ref.read(userProvider.notifier).setUser(userJson);//Cập nhật trạng thái người dùng trong bộ nhớ (RAM)
         // providerContainer object quản lý toàn bộ các provider trong ứng dụng 
         // .read(...) Đọc dữ liệu từ một provider cụ thể
         // .notifier Truy cập vào logic bên trong UserProvider (nơi có method setUser(...))
@@ -88,13 +89,14 @@ class AuthController {
     }
     catch (e) {
       // Handle any exceptions that occur during the sign-in process
-      print('Error during sign-in: $e');
+      print('Có lỗi trong quá trình đăng nhập: $e');
       // You can show a snackbar or dialog to inform the user about the error
     }
   }
   //Sign out 
   Future<void> signOutUser({
-    required context
+    required BuildContext context,
+    required WidgetRef ref,
   }) async {
     try {
       SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -102,7 +104,9 @@ class AuthController {
       await preferences.remove('auth_token'); // Xóa token khỏi SharedPreferences
       await preferences.remove('user'); // Xóa user khỏi SharedPreferences
       //clear the user state
-      providerContainer.read(userProvider.notifier).signOut(); // Đặt lại trạng thái người dùng về null
+      ref.read(userProvider.notifier).signOut(); // Đặt lại trạng thái người dùng về null
+      ref.read(deliveredOrderCountProvider.notifier).resetCount();
+
       //navigate the user back to the login screen
       Navigator.pushAndRemoveUntil(
         context,
@@ -118,11 +122,12 @@ class AuthController {
   }
   //Update user state city and locality
     Future<void> updateUserLocation({
-      required context,
+      required BuildContext context,
       required String id,
       required String state,
       required String city,
-      required String locality
+      required String locality,
+      required WidgetRef ref,
     }) async {
       try {
         //make an HTTP PUT request to update user state, city and locality
@@ -151,7 +156,7 @@ class AuthController {
           final userJson = jsonEncode(updateUser);
           //update the application state with the updated user data user in Riverpod
           //this ensures the app reflects the most recent user data
-          providerContainer.read(userProvider.notifier).setUser(userJson);
+          ref.read(userProvider.notifier).setUser(userJson);
           //store the updated user data in shared preference for future user
           //this allows the app to retrive the user data even after the app restarts
           await  preferences.setString('user', userJson);
