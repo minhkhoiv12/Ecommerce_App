@@ -8,7 +8,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class ProductItemWidget extends ConsumerStatefulWidget {
-  //const ProductItemWidget({super.key});
   final Product product;
 
   const ProductItemWidget({super.key, required this.product});
@@ -23,8 +22,10 @@ class _ProductItemWidgetState extends ConsumerState<ProductItemWidget> {
     final cartProviderData = ref.read(cartProvider.notifier);
     final cartData = ref.watch(cartProvider);
     final isInCart = cartData.containsKey(widget.product.id);
+
     final favoriteProviderData = ref.read(favoriteProvider.notifier);
     ref.watch(favoriteProvider);
+
     return InkWell(
       onTap: () {
         Navigator.push(
@@ -43,6 +44,7 @@ class _ProductItemWidgetState extends ConsumerState<ProductItemWidget> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              // ===== ẢNH SẢN PHẨM =====
               Container(
                 height: 170,
                 decoration: BoxDecoration(
@@ -51,11 +53,26 @@ class _ProductItemWidgetState extends ConsumerState<ProductItemWidget> {
                 ),
                 child: Stack(
                   children: [
-                    Image.network(
-                      widget.product.images[0],
-                      height: 170,
-                      fit: BoxFit.cover,
-                    ),
+                    // Nếu có ảnh thì hiển thị, nếu không thì hiện khung xám + icon
+                    widget.product.images.isNotEmpty
+                        ? Image.network(
+                            widget.product.images[0],
+                            height: 170,
+                            width: double.infinity,
+                            fit: BoxFit.cover,
+                          )
+                        : Container(
+                            height: 170,
+                            width: double.infinity,
+                            color: Colors.grey[300],
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
+                          ),
+
+                    // ===== NÚT YÊU THÍCH =====
                     Positioned(
                       top: 5,
                       right: 0,
@@ -78,14 +95,15 @@ class _ProductItemWidgetState extends ConsumerState<ProductItemWidget> {
                             'Đã thêm ${widget.product.productName}',
                           );
                         },
-                        child:
-                            favoriteProviderData.getFavoriteItems.containsKey(
-                              widget.product.id,
-                            )
-                            ? Icon(Icons.favorite, color: Colors.red)
+                        child: favoriteProviderData.getFavoriteItems.containsKey(
+                          widget.product.id,
+                        )
+                            ? const Icon(Icons.favorite, color: Colors.red)
                             : const Icon(Icons.favorite_border),
                       ),
                     ),
+
+                    // ===== NÚT GIỎ HÀNG =====
                     Positioned(
                       bottom: 0,
                       right: 0,
@@ -121,17 +139,22 @@ class _ProductItemWidgetState extends ConsumerState<ProductItemWidget> {
                 ),
               ),
 
+              const SizedBox(height: 5),
+
+              // ===== TÊN SẢN PHẨM =====
               Text(
                 widget.product.productName,
                 overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.roboto(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF212121),
+                  color: const Color(0xFF212121),
                 ),
               ),
+
+              // ===== ĐÁNH GIÁ =====
               widget.product.averageRating == 0
-                  ? SizedBox()
+                  ? const SizedBox()
                   : Row(
                       children: [
                         const Icon(Icons.star, color: Colors.amber, size: 12),
@@ -146,14 +169,17 @@ class _ProductItemWidgetState extends ConsumerState<ProductItemWidget> {
                       ],
                     ),
 
+              // ===== DANH MỤC =====
               Text(
                 widget.product.category,
                 style: GoogleFonts.quicksand(
                   fontSize: 13,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xFF757575),
+                  color: const Color(0xFF757575),
                 ),
               ),
+
+              // ===== GIÁ =====
               Text(
                 "\$${widget.product.productPrice.toStringAsFixed(2)}",
                 style: GoogleFonts.montserrat(

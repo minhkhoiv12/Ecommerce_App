@@ -21,9 +21,6 @@ class BannerController {
         List<BannerModel> banners = data.map((banner) => BannerModel.fromJson(banner)).toList();
         return banners;
       }
-      else if(response.statusCode ==404){
-        return [];
-      }
       else{
         //throw an exception if server responsed with an error status code
         throw Exception('Load banner thất bại');

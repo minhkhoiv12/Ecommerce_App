@@ -23,7 +23,7 @@ class HeaderWidget extends StatelessWidget {
               height: 50,
               child: TextField(
                 decoration: InputDecoration(
-                  hintText: 'Enter Text',
+                  hintText: 'Tìm kiếm sản phẩm',
                   hintStyle: const TextStyle(
                     fontSize: 14,
                     color: Color(0xFF7F7F7F),// màu của text

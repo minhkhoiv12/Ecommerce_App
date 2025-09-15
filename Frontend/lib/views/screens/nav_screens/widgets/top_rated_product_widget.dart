@@ -1,5 +1,4 @@
 import 'package:bai1/controllers/product_controller.dart';
-import 'package:bai1/provider/product_provider.dart';
 import 'package:bai1/provider/top_rated_product_provider.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/product_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -14,23 +13,13 @@ class TopRatedProductWidget extends ConsumerStatefulWidget {
 }
 
 class _TopRatedProductWidgetState extends ConsumerState<TopRatedProductWidget> {
-  bool isLoading = true;
-
   //A Future that will hold the list of the popular products
   // late Future<List<Product>> futurePopularProducts;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    final products = ref.read(productProvider);
-    if(products.isEmpty){
-      _fetchProduct();
-    }
-    else {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    _fetchProduct();
   }
 
   Future<void> _fetchProduct() async {
@@ -40,10 +29,6 @@ class _TopRatedProductWidgetState extends ConsumerState<TopRatedProductWidget> {
       ref.read(topRatedProductProvider.notifier).setProducts(products);
     } catch (e) {
       print("$e");
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
     }
   }
 
@@ -52,8 +37,7 @@ class _TopRatedProductWidgetState extends ConsumerState<TopRatedProductWidget> {
     final products = ref.watch(topRatedProductProvider);
     return SizedBox(
       height: 250,
-      child: isLoading? const Center(child: CircularProgressIndicator(color: Colors.blue)):
-      ListView.builder(
+      child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: products.length,
         // shrinkWrap: true,

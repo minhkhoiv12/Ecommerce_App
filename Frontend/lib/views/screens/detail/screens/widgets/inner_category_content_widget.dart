@@ -92,7 +92,7 @@ class _InnerCategoryContentWidgetState extends State<InnerCategoryContentWidget>
                               children: subcategories.sublist(start, end > subcategories.length ? subcategories.length : end).map((subcategory) {
                                 return SubcategoryTitleWidget(
                                   image: subcategory.image,
-                                  title: subcategory.categoryName,
+                                  title: subcategory.subCategoryName,
       
                                 );
                               }).toList(),

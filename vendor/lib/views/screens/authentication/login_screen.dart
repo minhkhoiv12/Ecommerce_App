@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   fontSize: 23,
                   )
                 ),
-                Text("To Explore the world of Flutter",
+                Text("Khám phá thế giới mua sắm",
                   style: GoogleFonts.getFont(
                     'Lato',
                     color: Color(0xFF0d120E),

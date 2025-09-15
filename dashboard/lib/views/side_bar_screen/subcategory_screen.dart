@@ -112,7 +112,7 @@ class _SubcategoryScreenState extends State<SubcategoryScreen> {
                       borderRadius: BorderRadius.circular(5,),
                     ),
                     child: Center(
-                      child: _image !=null ? Image.memory(_image) : Text("Hình ảnh loại sản phẩm con",
+                      child: _image !=null ? Image.memory(_image) : Text("Hình ảnh",
                       ),
                     ),
                   ),

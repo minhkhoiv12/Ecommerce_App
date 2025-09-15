@@ -24,9 +24,6 @@ class ProductController {
         List<Product> products = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
         return products;
       }
-      else if(response.statusCode ==404){
-        return [];
-      }
       else {
         //if status code is not 200, throw an exeption  indicating failure to load the popular products
         throw Exception('Thất bại khi tải sản phẩm phổ biến');
@@ -51,9 +48,6 @@ class ProductController {
         //map each items in the list to product model object which we can use 
         List<Product> products = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
         return products;
-      }
-      else if(response.statusCode ==404){
-        return [];
       }
       else {
         //if status code is not 200, throw an exeption  indicating failure to load the popular products
@@ -80,9 +74,6 @@ class ProductController {
         List<Product> relatedProducts = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
         return relatedProducts;
       }
-      else if(response.statusCode ==404){
-        return [];
-      }
       else {
         //if status code is not 200, throw an exeption  indicating failure to load the popular products
         throw Exception('Thất bại khi tải sản phẩm liên quan');
@@ -106,9 +97,6 @@ class ProductController {
         //map each items in the list to product model object which we can use 
         List<Product> topRelatedProducts = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
         return topRelatedProducts;
-      }
-      else if(response.statusCode ==404){
-        return [];
       }
       else {
         //if status code is not 200, throw an exeption  indicating failure to load the popular products

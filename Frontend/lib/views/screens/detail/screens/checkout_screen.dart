@@ -25,7 +25,7 @@ class _CheckoutScreenState extends ConsumerState<CheckoutScreen> {
     final user = ref.watch(userProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Checkout Screen'),
+        title: Text('Thanh toán'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(

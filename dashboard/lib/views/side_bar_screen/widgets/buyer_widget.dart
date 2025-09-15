@@ -11,97 +11,98 @@ class BuyerWidget extends StatefulWidget {
 }
 
 class _BuyerWidgetState extends State<BuyerWidget> {
-  // A Future that will hold the list of buyers once loaded from api
   late Future<List<Buyer>> futureBuyers;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     futureBuyers = BuyerController().loadBuyers();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget buyerData(int flex, Widget widget) {
-      return Expanded(
-        flex: flex,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade700),
-          ),
-          child: Padding(padding: const EdgeInsets.all(8), child: widget),
-        ),
-      );
-    }
-
-    return FutureBuilder(
+    return FutureBuilder<List<Buyer>>(
       future: futureBuyers,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         } else if (snapshot.hasError) {
           return Center(child: Text("Lỗi: ${snapshot.error}"));
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('Không có banner nào '));
+          return const Center(child: Text('Không có người mua nào.'));
         } else {
           final buyers = snapshot.data!;
-          return ListView.builder(
+          return ListView.separated(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: buyers.length,
-
+            separatorBuilder: (_, __) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               final buyer = buyers[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    buyerData(
-                      1,
-                      CircleAvatar(
-                        child: Text(
-                          buyer.fullName[0],
-                          style: GoogleFonts.montserrat(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+              return Card(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                elevation: 3,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: CircleAvatar(
+                          radius: 24,
+                          backgroundColor: Colors.blue.shade200,
+                          child: Text(
+                            buyer.fullName[0].toUpperCase(),
+                            style: GoogleFonts.montserrat(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                    buyerData(
-                      3,
-                      Text(
-                        buyer.fullName,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          buyer.fullName,
+                          style: GoogleFonts.montserrat(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
-                    buyerData(
-                      2,
-                      Text(
-                        buyer.email,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          buyer.email,
+                          style: GoogleFonts.montserrat(fontSize: 14),
                         ),
                       ),
-                    ),
-                    buyerData(
-                      2,
-                      Text(
-                        "${buyer.state} ${buyer.city}",
-                        style: GoogleFonts.montserrat(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          "${buyer.state}, ${buyer.city}",
+                          style: GoogleFonts.montserrat(fontSize: 14),
                         ),
                       ),
-                    ),
-                    buyerData(
-                      1,
-                      TextButton(onPressed: () {}, child: Text('Xoá')),
-                    ),
-                  ],
+                      Expanded(
+                        flex: 2,
+                        child: TextButton.icon(
+                          onPressed: () {},
+                          icon: const Icon(Icons.delete, color: Colors.red),
+                          label: Text(
+                            "Xoá",
+                            style: GoogleFonts.montserrat(
+                              color: Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               );
             },

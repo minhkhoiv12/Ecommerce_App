@@ -38,10 +38,10 @@ class _MainVendorScreenState extends State<MainVendorScreen> {
         type: BottomNavigationBarType.fixed,
         items: const
         [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.money_dollar), label: 'Earnings'),
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.money_dollar), label: 'Doanh thu'),
           BottomNavigationBarItem(icon: Icon(CupertinoIcons.upload_circle), label: 'Upload'),
           BottomNavigationBarItem(icon: Icon(Icons.edit), label: 'Edit'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.shopping_cart), label: 'Orders'),
+          BottomNavigationBarItem(icon: Icon(CupertinoIcons.shopping_cart), label: 'Đơn hàng'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'profile'),
         ],
       ),

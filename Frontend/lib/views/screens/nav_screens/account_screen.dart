@@ -114,7 +114,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                         child: CircleAvatar(
                           radius: 65,
                           backgroundImage: NetworkImage(
-                            "https://cdn.pixabay.com/photo/2014/04/03/10/32/businessman-310819_1280.png",
+                            "https://i.pinimg.com/736x/15/8a/ed/158aed47fc0139376c2d04768fe6a79e.jpg",
                           ),
                         ),
                       ),
@@ -206,7 +206,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                             left: 212,
                             top: 99,
                             child: Text(
-                              "Completed",
+                              "Hoàn thành",
                               style: GoogleFonts.quicksand(
                                 fontSize: 14,
                                 color: Colors.white,
@@ -261,7 +261,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                             left: 108,
                             top: 99,
                             child: Text(
-                              'Favorite',
+                              'Yêu thích',
                               style: GoogleFonts.montserrat(
                                 color: Colors.white,
                                 letterSpacing: 0.3,
@@ -315,7 +315,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
                             left: 13,
                             top: 99,
                             child: Text(
-                              'Cart',
+                              'Giỏ hàng',
                               style: GoogleFonts.montserrat(
                                 fontSize: 14,
                                 color: Colors.white,
@@ -375,7 +375,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               },
               leading: Image.asset('assets/icons/orders.png'),
               title: Text(
-                'Track your order',
+                'Theo dõi đơn hàng của bạn',
                 style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
               ),
             ),
@@ -393,7 +393,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               },
               leading: Image.asset('assets/icons/history.png'),
               title: Text(
-                'History',
+                'Lịch sử',
                 style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
               ),
             ),
@@ -402,7 +402,7 @@ class _AccountScreenState extends ConsumerState<AccountScreen> {
               onTap: () {},
               leading: Image.asset('assets/icons/help.png'),
               title: Text(
-                'Help',
+                'Trợ giúp',
                 style: GoogleFonts.montserrat(fontWeight: FontWeight.bold),
               ),
             ),

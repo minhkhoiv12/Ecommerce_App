@@ -138,7 +138,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                       childAspectRatio: 3/4), 
                     itemBuilder: (context, index){
                       final subcategory = _subcategories[index];
-                      return SubcategoryTitleWidget(image: subcategory.image, title: subcategory.categoryName);
+                      return SubcategoryTitleWidget(image: subcategory.image, title: subcategory.subCategoryName);
                       // return Column(
                       //   children: [
                       //     Container(

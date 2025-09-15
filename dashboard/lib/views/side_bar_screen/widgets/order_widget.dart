@@ -1,6 +1,4 @@
-import 'package:dashboard_ecomerce/controllers/buyer_controller.dart';
 import 'package:dashboard_ecomerce/controllers/order_controller.dart';
-import 'package:dashboard_ecomerce/models/buyer.dart';
 import 'package:dashboard_ecomerce/models/order.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,124 +11,128 @@ class OrderWidget extends StatefulWidget {
 }
 
 class _OrderWidgetState extends State<OrderWidget> {
-  // A Future that will hold the list of buyers once loaded from api
   late Future<List<Order>> futureOrders;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     futureOrders = OrderController().loadOrders();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget orderData(int flex, Widget widget) {
+    Widget orderCell(int flex, Widget child, {TextAlign align = TextAlign.center}) {
       return Expanded(
         flex: flex,
-        child: Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: Colors.grey.shade700),
-          ),
-          child: Padding(padding: const EdgeInsets.all(8), child: widget),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 8),
+          child: Align(alignment: Alignment.center, child: child),
         ),
       );
     }
 
-    return FutureBuilder(
+    return FutureBuilder<List<Order>>(
       future: futureOrders,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const CircularProgressIndicator();
+          return const Padding(
+            padding: EdgeInsets.all(20),
+            child: Center(child: CircularProgressIndicator()),
+          );
         } else if (snapshot.hasError) {
-          return Center(child: Text("Lỗi: ${snapshot.error}"));
+          return Center(
+            child: Text(
+              "Lỗi: ${snapshot.error}",
+              style: GoogleFonts.montserrat(color: Colors.red),
+            ),
+          );
         } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return Center(child: Text('Không có đơn hàng nào '));
+          return Padding(
+            padding: const EdgeInsets.all(20),
+            child: Center(
+              child: Text(
+                'Không có đơn hàng nào',
+                style: GoogleFonts.montserrat(fontSize: 16, color: Colors.grey),
+              ),
+            ),
+          );
         } else {
           final orders = snapshot.data!;
           return ListView.builder(
             shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
             itemCount: orders.length,
-
             itemBuilder: (context, index) {
               final order = orders[index];
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 6, horizontal: 4),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
+                    )
+                  ],
+                ),
                 child: Row(
                   children: [
-                    orderData(
+                    orderCell(
                       2,
-                      Image.network(order.image, width: 50, height: 50),
+                      Image.network(order.image, width: 50, height: 50, fit: BoxFit.cover),
                     ),
-                    orderData(
+                    orderCell(
                       2,
                       Text(
                         order.productName,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: GoogleFonts.montserrat(fontSize: 15, fontWeight: FontWeight.w600),
                       ),
                     ),
-                    orderData(
+                    orderCell(
                       2,
                       Text(
                         "\$${order.productPrice.toStringAsFixed(2)}",
                         style: GoogleFonts.montserrat(
-                          fontSize: 17,
+                          fontSize: 15,
                           fontWeight: FontWeight.bold,
                           color: Colors.purple,
                         ),
                       ),
                     ),
-                     orderData(
+                    orderCell(
                       2,
-                      Text(
-                        order.category,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text(order.category, style: GoogleFonts.montserrat(fontSize: 14)),
                     ),
-                     orderData(
+                    orderCell(
                       2,
-                      Text(
-                        order.fullName,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                  
-                        ),
-                      ),
+                      Text(order.fullName, style: GoogleFonts.montserrat(fontSize: 14)),
                     ),
-                     orderData(
+                    orderCell(
                       2,
-                      Text(
-                        order.email,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          
-                        ),
-                      ),
+                      Text(order.email, style: GoogleFonts.montserrat(fontSize: 13)),
                     ),
-                     orderData(
+                    orderCell(
                       2,
-                      Text(
-                        order.locality,
-                        style: GoogleFonts.montserrat(
-                          fontSize: 17,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
+                      Text(order.locality, style: GoogleFonts.montserrat(fontSize: 13)),
                     ),
-                     orderData(
+                    orderCell(
                       2,
                       Text(
-                        order.delivered==true?"đã giao":order.processing==true?"đang xử lý": "đã huỷ",
+                        order.delivered
+                            ? "Đã giao"
+                            : order.processing
+                                ? "Đang xử lý"
+                                : "Đã huỷ",
                         style: GoogleFonts.montserrat(
-                          fontSize: 11,
+                          fontSize: 13,
                           fontWeight: FontWeight.bold,
+                          color: order.delivered
+                              ? Colors.green
+                              : order.processing
+                                  ? Colors.orange
+                                  : Colors.red,
                         ),
                       ),
                     ),
