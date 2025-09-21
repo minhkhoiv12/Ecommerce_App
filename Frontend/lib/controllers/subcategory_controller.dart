@@ -17,21 +17,17 @@ class SubcategoryController {
           return data.map((subcategory) => Subcategory.fromJson(subcategory)).toList();
         }
         else{
-          print("Không tìm thấy danh mục con nào!");
           return [];
         }
       }
       else if(response.statusCode == 404){
-         print("Không tìm thấy danh mục con nào!");
          return [];
       }
       else {
-         print("Không thể tìm được danh mục con!");
          return [];
       }
     }
     catch (e){
-      print("Lỗi không thể tìm thấy danh mục con");
       return [];
     }
   }

@@ -1,4 +1,5 @@
 import 'package:bai1/controllers/product_controller.dart';
+import 'package:bai1/provider/product_provider.dart';
 import 'package:bai1/provider/top_rated_product_provider.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/product_item_widget.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,7 @@ class TopRatedProductWidget extends ConsumerStatefulWidget {
 class _TopRatedProductWidgetState extends ConsumerState<TopRatedProductWidget> {
   //A Future that will hold the list of the popular products
   // late Future<List<Product>> futurePopularProducts;
+  bool isLoading = true;
   @override
   void initState() {
     // TODO: implement initState
@@ -23,12 +25,19 @@ class _TopRatedProductWidgetState extends ConsumerState<TopRatedProductWidget> {
   }
 
   Future<void> _fetchProduct() async {
-    final ProductController productController = ProductController();
+    final productController = ProductController();
     try {
       final products = await productController.loadTopRatedProduct();
+      if (!mounted) return; // ✅ tránh gọi ref sau khi widget dispose
       ref.read(topRatedProductProvider.notifier).setProducts(products);
     } catch (e) {
-      print("$e");
+      print("Error fetching top rated products: $e");
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
     }
   }
 
@@ -37,7 +46,8 @@ class _TopRatedProductWidgetState extends ConsumerState<TopRatedProductWidget> {
     final products = ref.watch(topRatedProductProvider);
     return SizedBox(
       height: 250,
-      child: ListView.builder(
+      child: isLoading? const Center(child: CircularProgressIndicator(color: Colors.blue),):
+      ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: products.length,
         // shrinkWrap: true,
