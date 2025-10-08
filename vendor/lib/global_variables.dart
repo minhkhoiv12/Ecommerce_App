@@ -1,1 +1,1 @@
-String uri = 'http://192.168.1.19:3000';
+String uri = 'https://deploy-ecommerce-app-izc2.onrender.com';

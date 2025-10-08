@@ -1,6 +1,7 @@
 const express = require('express');
 const orderRouter = express.Router();
 const Order = require('../models/order');
+const stripe = require('stripe')(process.env.STRIPE);
 const {auth, vendorAuth} = require('../middleware/auth');
 //Post router for creating orders
 orderRouter.post('/api/orders',auth,async(req, res)=>{
@@ -19,6 +20,9 @@ orderRouter.post('/api/orders',auth,async(req, res)=>{
             image,
             vendorId,
             buyerId,
+            paymentStatus,
+            paymentIntentId,
+            paymentMethod,
             
         } = req.body;
         const createdAt = new Date().getMilliseconds();//Get the current date
@@ -35,7 +39,10 @@ orderRouter.post('/api/orders',auth,async(req, res)=>{
             image,
             vendorId,
             buyerId,
-            createdAt
+            createdAt,
+            paymentStatus,
+            paymentIntentId,
+            paymentMethod,
         });
         await order.save();
         return res.status(201).json(order);
@@ -85,6 +92,72 @@ orderRouter.delete("/api/orders/:id",auth, async (req, res)=> {
         //if an error occures during the process, return a 500 status with error message
         res.status(500).json({error: e.message});
     }   
+});
+
+orderRouter.post('/api/payment', async (req, res)=> {
+    try {
+        const {orderId, paymentMethodId, currency='usd'} = req.body;
+        //validate the presence of the required fields
+        if(!orderId || !paymentMethodId || !currency){
+            return res.status(400).json({msg: "Thiếu trường yêu cầu"});
+        }
+        //Query for the order by orderId
+        const order = await Order.findById(orderId);
+        if(!order){
+            console.log("Không tìm thấy đơn hàng", orderId);
+            return res.status(404).json({msg: "Không tìm thấy đơn hàng"});
+        }
+        //calculate the total amount(price * quantity)
+        const totalAmount = order.productPrice * order.quantity;
+        //Ensure the amount is at least $0.50 USD or its equivalent
+        const miniumAmount = 0.50;
+        if(totalAmount < miniumAmount){
+            return res.status(400).json({error: "hệ thống không chấp nhận giao dịch nhỏ hơn 0.50 USD."});
+        }
+        //convert total amount to cents(Stripe requires the amount in cents)
+        const amountInCents = Math.round(totalAmount * 100);
+        //Now create the Payment intent with the correct amount
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: amountInCents,
+            currency: currency,
+            payment_method: paymentMethodId,
+            automatic_payment_methods: {enabled: true},
+        });
+        return res.json({
+            status: "Thành công",
+            paymentIntentId: paymentIntent.id,
+            amount: paymentIntent.amount /100,
+            currency: paymentIntent.currency,
+        });
+    }
+    catch (e){
+        res.status(500).json({error: e.message});
+
+    }
+});
+orderRouter.post('/api/payment-intent',auth, async (req, res)=> {
+    try {
+        const {amount, currency} = req.body;
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount,
+            currency,
+        });
+        return res.status(200).json(paymentIntent);
+
+    }
+    catch (e){
+        return res.status(500).json({error: e.message});
+
+    }
+});
+orderRouter.get('/api/payment-intent/:id', auth, async (req,res)=> {
+    try {
+        const paymentIntent = await stripe.paymentIntents.retrieve(req.params.id);
+        return res.status(200).json(paymentIntent);
+    }
+    catch(e){
+        return res.status(500).json({error: e.message});
+    }
 });
 
 //GET route for fetching orders by vendor ID

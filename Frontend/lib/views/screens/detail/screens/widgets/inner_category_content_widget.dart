@@ -3,6 +3,7 @@ import 'package:bai1/controllers/subcategory_controller.dart';
 import 'package:bai1/models/category.dart';
 import 'package:bai1/models/product.dart';
 import 'package:bai1/models/subcategory.dart';
+import 'package:bai1/views/screens/detail/screens/subcategory_product_screen.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/inner_banner_widget.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/inner_header_widget.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/subcategory_title_widget.dart';
@@ -90,10 +91,17 @@ class _InnerCategoryContentWidgetState extends State<InnerCategoryContentWidget>
                             child: Row(
                               // create a row of teh subcategory tile
                               children: subcategories.sublist(start, end > subcategories.length ? subcategories.length : end).map((subcategory) {
-                                return SubcategoryTitleWidget(
-                                  image: subcategory.image,
-                                  title: subcategory.subCategoryName,
-      
+                                return GestureDetector(
+                                  onTap: (){
+                                    Navigator.push(context, MaterialPageRoute(builder: (context){
+                                      return SubcategoryProductScreen(subcategory: subcategory);
+                                    }));
+                                  },
+                                  child: SubcategoryTitleWidget(
+                                    image: subcategory.image,
+                                    title: subcategory.subCategoryName,
+                                        
+                                  ),
                                 );
                               }).toList(),
                             )

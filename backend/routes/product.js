@@ -1,7 +1,8 @@
 const express = require("express");
 const Product = require('../models/product');
 const productRouter = express.Router();
-const {auth, vendorAuth} = require('../middleware/auth')
+const {auth, vendorAuth} = require('../middleware/auth');
+const orderRouter = require("./order");
 productRouter.post('/api/add-product',auth, vendorAuth, async(req, res) => {
     try{
         const {productName, productPrice, quantity, description, category, vendorId, fullName, subCategory, images} = req.body;
@@ -88,6 +89,7 @@ productRouter.get('/api/related-products-by-subcategory/:productId', async(req,r
         return res.status(500).json({error: e.message});
     }
 });
+
 //route for retrieving the top 10 highest-rated products
 productRouter.get('/api/top-rated-products', async(req,res)=>{
     try{
@@ -110,7 +112,7 @@ productRouter.get('/api/products-by-subcategory/:subCategory', async (req, res) 
     try {
         const {subCategory} = req.params;
         const products = await Product.find({subCategory:subCategory});
-        if(!products || !products.length ==0){
+        if(!products || products.length ==0){
             return res.status(404).json({msg: "Không tìm thấy danh mục con này"});
         }
         return res.status(200).json(products);
@@ -155,6 +157,37 @@ productRouter.get('/api/search-products', async(req,res)=> {
     }
     catch(e) {
         return res.status(500).json({error: e.message});
+
+    }
+});
+//Route to edit an existing product
+productRouter.put('/api/edit-product/:productId',auth, vendorAuth, async (req, res) => {
+    try {
+        //Extract product ID from the request parameter
+        const {productId} = req.params;
+        //Check if the product exists and if the vendor is authorized to edit it
+        const product = await Product.findById(productId);
+        if(!product){
+            return res.status(404).json({msg: "Không tìm thấy sản phẩm"});
+        }
+        if(product.vendorId.toString()!==req.user.id){
+            return res.status(403).json({msg: "Không cho phép thay đổi sản phẩm"});
+        }
+        //Destructure req.body to exclude vendorid
+        const {vendorId, ...updateData} = req.body;
+        //update the product with the fields provided in updateData
+        const updatedProduct = await Product.findByIdAndUpdate(
+            productId,
+            {$set:updateData},//update only fields in the updateData
+            {new: true}
+        )// return the updated product document in the response
+            // return the updated product with 200 ok status 
+            return res.status(200).json(updatedProduct);
+        
+    }
+    catch (e)
+    {
+                return res.status(500).json({error: e.message});
 
     }
 });

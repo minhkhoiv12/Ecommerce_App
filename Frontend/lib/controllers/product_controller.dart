@@ -119,5 +119,59 @@ class ProductController {
       throw Exception('Lỗi khi tải sản phẩm được đánh giá cáo nhất: $e');
     }
   }
+   Future<List<Product>> loadProductsBySubcategory(String subCategory) async {
+    try {
+      http.Response response = await http.get(Uri.parse("$uri/api/products-by-subcategory/${Uri.encodeComponent(subCategory)}"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if(response.statusCode == 200){
+        //Decode the json response body into a list of dynamic objects
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
+        //map each items in the list to product model object which we can use 
+        List<Product> relatedProducts = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
+        return relatedProducts;
+      }
+      else if(response.statusCode == 404){
+        return [];
+      }
+      else {
+        //if status code is not 200, throw an exeption  indicating failure to load the popular products
+        throw Exception('Thất bại khi tải sản phẩm con liên quan');
+      }
+    }
+    catch (e) {
+      throw Exception('Lỗi khi tải sản phẩm con liên quan: $e');
+    }
+  }
 
+  //Method to search for products by name of description
+
+  Future<List<Product>> searchProducts(String query) async {
+    try {
+      http.Response response = await http.get(Uri.parse("$uri/api/search-products?query=$query"),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+        },
+      );
+      if(response.statusCode == 200){
+        //Decode the json response body into a list of dynamic objects
+        final List<dynamic> data = json.decode(response.body) as List<dynamic>;
+        //map each items in the list to product model object which we can use 
+        List<Product> searchedProducts = data.map((product)=> Product.fromMap(product as Map<String, dynamic>)).toList();
+        return searchedProducts;
+      }
+      else if(response.statusCode == 404){
+        return [];
+      }
+      else {
+        //if status code is not 200, throw an exeption  indicating failure to load the popular products
+        throw Exception('Thất bại không tìm thấy sản phẩm liên quan');
+      }
+    }
+    catch (e) {
+      throw Exception('Lỗi khi tìm thấy sản phẩm liên quan: $e');
+    }
+  }
 }

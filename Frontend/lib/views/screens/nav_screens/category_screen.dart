@@ -3,6 +3,7 @@ import 'package:bai1/controllers/subcategory_controller.dart';
 import 'package:bai1/models/category.dart';
 import 'package:bai1/provider/category_provider.dart';
 import 'package:bai1/provider/subcategory_provider.dart';
+import 'package:bai1/views/screens/detail/screens/subcategory_product_screen.dart';
 import 'package:bai1/views/screens/detail/screens/widgets/subcategory_title_widget.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/header_widget.dart';
 import 'package:flutter/material.dart';
@@ -139,9 +140,16 @@ class _CategoryScreenState extends ConsumerState<CategoryScreen> {
                                     ),
                                 itemBuilder: (context, index) {
                                   final subcategory = subcategories[index];
-                                  return SubcategoryTitleWidget(
-                                    image: subcategory.image,
-                                    title: subcategory.subCategoryName,
+                                  return GestureDetector(
+                                    onTap: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context){
+                                        return SubcategoryProductScreen(subcategory: subcategory);
+                                      }));
+                                    },
+                                    child: SubcategoryTitleWidget(
+                                      image: subcategory.image,
+                                      title: subcategory.subCategoryName,
+                                    ),
                                   );
                                 },
                               )

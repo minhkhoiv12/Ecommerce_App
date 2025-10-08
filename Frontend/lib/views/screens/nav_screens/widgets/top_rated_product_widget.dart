@@ -1,5 +1,4 @@
 import 'package:bai1/controllers/product_controller.dart';
-import 'package:bai1/provider/product_provider.dart';
 import 'package:bai1/provider/top_rated_product_provider.dart';
 import 'package:bai1/views/screens/nav_screens/widgets/product_item_widget.dart';
 import 'package:flutter/material.dart';

@@ -1,3 +1,4 @@
+import 'package:bai1/views/screens/detail/screens/search_product_screen.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -22,6 +23,11 @@ class HeaderWidget extends StatelessWidget {
               width: 250,
               height: 50,
               child: TextField(
+                onTap: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context){
+                    return SearchProductScreen();
+                  }));
+                },
                 decoration: InputDecoration(
                   hintText: 'Tìm kiếm sản phẩm',
                   hintStyle: const TextStyle(
